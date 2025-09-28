@@ -19,7 +19,7 @@ class CreateVolsTable extends Migration
             $table->dateTime('date_arrive');
             $table->string('origine', 255);
             $table->string('destination', 255);
-            $table->integer('prix');
+            $table->decimal('prix', 10, 2)->unsigned();
             $table->boolean('efface')->default(0);
             $table->timestamps();
 
