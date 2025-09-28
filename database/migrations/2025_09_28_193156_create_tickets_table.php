@@ -29,9 +29,11 @@ class CreateTicketsTable extends Migration
               ->on('users')
               ->onUpdate('cascade')
               ->onDelete('cascade');
+
+               $table->unsignedInteger('quantite')->default(1);
         });
         
-            $table->unsignedInteger('quantite')->default(1);
+           
 
 
     }
