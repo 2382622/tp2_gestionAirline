@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Vol;
+use App\Models\Avion;
+use Illuminate\Support\Facades\Validator;
+
 
 class VolController extends Controller
 {
@@ -13,7 +18,8 @@ class VolController extends Controller
      */
     public function index()
     {
-        //
+        $vols = Vol::with('avion')->latest()->paginate(10);
+        return view('vols.index', compact('vols'));
     }
 
     /**
@@ -23,7 +29,8 @@ class VolController extends Controller
      */
     public function create()
     {
-        //
+        $avions = Avion::all(); 
+        return view('vols.create', compact('avions'));
     }
 
     /**
@@ -34,7 +41,25 @@ class VolController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'id'          => 'required|string|unique:vols,id',
+            'origine'     => 'required|string|max:255',
+            'destination' => 'required|string|max:255',
+            'date_depart' => 'required|date',
+            'date_arrive' => 'required|date|after:date_depart',
+            'prix'        => 'required|numeric|min:0',
+            'avion_id'    => 'required|exists:avions,id',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('warning', 'Tous les champs sont requis');
+        }
+
+        Vol::create($request->all());
+        return redirect()->route('vols.index')->with('success', 'Vol ajouté avec succès');
     }
 
     /**
@@ -45,7 +70,7 @@ class VolController extends Controller
      */
     public function show($id)
     {
-        //
+         return view('vols.show', compact('vol'));
     }
 
     /**
@@ -56,7 +81,8 @@ class VolController extends Controller
      */
     public function edit($id)
     {
-        //
+         $avions = Avion::all();
+        return view('vols.edit', compact('vol', 'avions'));
     }
 
     /**
@@ -68,7 +94,24 @@ class VolController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'origine'     => 'required|string|max:255',
+            'destination' => 'required|string|max:255',
+            'date_depart' => 'required|date',
+            'date_arrive' => 'required|date|after:date_depart',
+            'prix'        => 'required|numeric|min:0',
+            'avion_id'    => 'required|exists:avions,id',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('warning', 'Tous les champs sont requis');
+        }
+
+        $vol->update($request->all());
+        return redirect()->route('vols.index')->with('success', 'Vol modifié avec succès');
     }
 
     /**
@@ -79,6 +122,7 @@ class VolController extends Controller
      */
     public function destroy($id)
     {
-        //
+         $vol->delete();
+        return redirect()->route('vols.index')->with('success', 'Vol supprimé avec succès');
     }
 }
