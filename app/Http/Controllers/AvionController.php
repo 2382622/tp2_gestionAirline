@@ -13,7 +13,9 @@ class AvionController extends Controller
      */
     public function index()
     {
-        //
+        
+    $avions = Avion::latest()->paginate(10);
+    return view('avions.index', compact('avions'));
     }
 
     /**
@@ -23,7 +25,7 @@ class AvionController extends Controller
      */
     public function create()
     {
-        //
+          return view('avions.create');
     }
 
     /**
@@ -34,8 +36,25 @@ class AvionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+    // Validation des champs
+    $validator = Validator::make($request->all(), [
+        'modele'   => 'required|string|max:255',
+        'capacite' => 'required|integer|min:1',
+    ]);
+
+    // Si échec de validation
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->with('warning', 'Tous les champs sont requis')
+            ->withErrors($validator);
     }
+
+    // Création 
+    Avion::create($request->all());
+
+    // Redirection avec message de succès
+    return redirect()->route('avions.index')->with('success', 'Avion ajouté avec succès');
+}
 
     /**
      * Display the specified resource.
@@ -45,7 +64,8 @@ class AvionController extends Controller
      */
     public function show($id)
     {
-        //
+             $avion = Avion::findOrFail($id);
+        return view('avions.show', compact('avion'));
     }
 
     /**
@@ -56,7 +76,8 @@ class AvionController extends Controller
      */
     public function edit($id)
     {
-        //
+         $avion = Avion::findOrFail($id);
+        return view('avions.edit', compact('avion'));
     }
 
     /**
@@ -68,7 +89,23 @@ class AvionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $avion = Avion::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'modele'   => 'required|string|max:255',
+            'capacite' => 'required|integer|min:1',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->with('warning','Tous les champs sont requis')
+                ->withErrors($validator);
+                        
+               
+        }
+
+        $avion->update($request->all());
+        return redirect()->route('avions.index')->with('success', 'Avion modifié avec succès');
     }
 
     /**
@@ -79,6 +116,9 @@ class AvionController extends Controller
      */
     public function destroy($id)
     {
-        //
+         $avion = Avion::findOrFail($id);
+        $avion->delete();
+
+        return redirect()->route('avions.index')->with('success', 'Avion supprimé avec succès');
     }
 }
