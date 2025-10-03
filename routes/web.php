@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// redirige vers les avions ou vols
+Route::get('/', [AvionController::class, 'index']);
+
+// Création des routes avec resources  
+Route::resources([
+    'avions' => AvionController::class,
+    'vols'   => VolController::class,
+]);
