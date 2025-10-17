@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AvionController;  
 use App\Http\Controllers\VolController; 
+use App\Http\Controllers\AccueilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +16,8 @@ use App\Http\Controllers\VolController;
 |
 */
 
-// redirige vers les avions ou vols
-Route::get('/', [AvionController::class, 'index']);
+// redirige vers les avions ou vols 
+Route::get('/', [AccueilController::class, 'index'])->name('accueil');
 
 // Création des routes avec resources  
 Route::resources([
