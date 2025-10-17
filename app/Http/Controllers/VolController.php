@@ -89,10 +89,10 @@ class VolController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $vol
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $vol)
     {
         $validator = Validator::make($request->all(), [
             'origine'     => 'required|string|max:255',
@@ -117,10 +117,10 @@ class VolController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $ivol
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($vol)
     {
          $vol->delete();
         return redirect()->route('vols.index')->with('success', 'Vol supprimé avec succès');
