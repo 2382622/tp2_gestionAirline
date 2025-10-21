@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AvionController;  
-use App\Http\Controllers\VolController; 
+use App\Http\Controllers\AvionController;
+use App\Http\Controllers\VolController;
 use App\Http\Controllers\AccueilController;
 
 /*
@@ -22,5 +22,5 @@ Route::get('/', [AccueilController::class, 'index'])->name('accueil');
 // Création des routes avec resources  
 Route::resources([
     'avions' => AvionController::class,
-    'vols'   => VolController::class,
+    'vols' => VolController::class,
 ]);
