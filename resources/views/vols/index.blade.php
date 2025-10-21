@@ -47,7 +47,8 @@
                         <form action="{{ route('vols.destroy', $vol->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                          <button type="submit" class="btn btn-danger"
+                            onclick="return confirm('Supprimer ce vol ?')">Supprimer</button>
                         </form>
                     </td>
                 </tr>
