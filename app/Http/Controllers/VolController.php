@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Vol;
 use App\Models\Avion;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class VolController extends Controller
 {
@@ -42,31 +43,51 @@ class VolController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+     public function store(Request $request)
     {
-        // Valide les champs soumis
+        // 1) Validation
         $validator = Validator::make($request->all(), [
-            'id' => 'required|string|unique:vols,id',
-            'origine' => 'required|string|max:255',
+            'id'          => 'required|string|unique:vols,id',
+            'origine'     => 'required|string|max:255',
             'destination' => 'required|string|max:255',
             'date_depart' => 'required|date',
             'date_arrive' => 'required|date|after:date_depart',
-            'prix' => 'required|numeric|min:0',
-            'avion_id' => 'required|exists:avions,id',
+            'prix'        => 'required|numeric|min:0',
+            'avion_id'    => 'required|exists:avions,id',
+            'photo'       => 'required|image|mimes:jpg,jpeg,png,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
-                ->withInput()
                 ->with('warning', 'Tous les champs sont requis');
         }
 
-        // Crée l’enregistrement
-        Vol::create($request->all());
+        // 2) Upload de la photo 
+        $fileName = null;
+        if ($request->file('photo') && $request->file('photo')->isValid()) {
+            $image    = $request->file('photo');
+            $fileName = time().'.'.$image->getClientOriginalExtension();
+            // => storage/app/public/images/upload/<fileName>
+            $image->storeAs('images/upload', $fileName, 'public');
+        }
+
+        // 3) Création du vol
+        Vol::create([
+            'id'          => $request->input('id'),
+            'origine'     => $request->input('origine'),
+            'destination' => $request->input('destination'),
+            'date_depart' => $request->input('date_depart'),
+            'date_arrive' => $request->input('date_arrive'),
+            'prix'        => $request->input('prix'),
+            'avion_id'    => $request->input('avion_id'),
+            'efface'      => $request->boolean('efface'),
+            'photo'       => $fileName, 
+        ]);
 
         return redirect()->route('vols.index')->with('success', 'Vol ajouté avec succès');
     }
+
 
     /**
      * Display the specified resource.
@@ -106,26 +127,50 @@ class VolController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // Valide les champs
+        // 1) Validation
         $validator = Validator::make($request->all(), [
-            'origine' => 'required|string|max:255',
+            'origine'     => 'required|string|max:255',
             'destination' => 'required|string|max:255',
             'date_depart' => 'required|date',
             'date_arrive' => 'required|date|after:date_depart',
-            'prix' => 'required|numeric|min:0',
-            'avion_id' => 'required|exists:avions,id',
+            'prix'        => 'required|numeric|min:0',
+            'avion_id'    => 'required|exists:avions,id',
+            'photo'       => 'nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
-                ->withInput()
                 ->with('warning', 'Tous les champs sont requis');
         }
 
-        // Charge le vol puis met à jour
+        // 2) Récupération
         $vol = Vol::findOrFail($id);
-        $vol->update($request->all());
+
+        // 3) Mise à jour des champs simples
+        $vol->origine     = $request->input('origine');
+        $vol->destination = $request->input('destination');
+        $vol->date_depart = $request->input('date_depart');
+        $vol->date_arrive = $request->input('date_arrive');
+        $vol->prix        = $request->input('prix');
+        $vol->avion_id    = $request->input('avion_id');
+        $vol->efface      = $request->boolean('efface');
+
+        // 4) Si une nouvelle photo est fournie, on remplace l’ancienne
+        if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+            // supprime l’ancienne si elle existe dans storage/app/public/images/upload
+            if (!empty($vol->photo) && Storage::disk('public')->exists('images/upload/'.$vol->photo)) {
+                Storage::disk('public')->delete('images/upload/'.$vol->photo);
+            }
+
+            $image    = $request->file('photo');
+            $fileName = time().'.'.$image->getClientOriginalExtension();
+            $image->storeAs('images/upload', $fileName, 'public');
+            $vol->photo = $fileName;
+        }
+
+        // 5) Sauvegarde
+        $vol->save();
 
         return redirect()->route('vols.index')->with('success', 'Vol modifié avec succès');
     }

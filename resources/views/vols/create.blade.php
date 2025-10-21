@@ -14,7 +14,7 @@
             </div>
         @endif
 
-        <form action="{{ route('vols.store') }}" method="POST">
+        <form action="{{ route('vols.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="mb-3">
@@ -56,6 +56,12 @@
                     @endforeach
                 </select>
             </div>
+
+             <div class="mb-3">
+            <label class="form-label">Photo du vol</label>
+            <input type="file" name="photo" class="form-control" accept=".jpg,.jpeg,.png,.gif,.svg" required>
+            <small class="text-muted">Formats autorisés : JPG, PNG, GIF, SVG</small>
+        </div>
 
             <button type="submit" class="btn btn-success">Enregistrer</button>
             <a href="{{ route('vols.index') }}" class="btn btn-secondary">Annuler</a>

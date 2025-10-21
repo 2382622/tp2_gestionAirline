@@ -10,6 +10,13 @@
         </div>
     @endif
 
+        {{-- Bouton pour créer un nouveau vol --}}
+    <div class="mb-3">
+        <a href="{{ route('vols.create') }}" class="btn btn-primary">
+            Créer un vol
+        </a>
+    </div>
+
     {{-- Tableau des vols --}}
     <table class="table table-bordered">
         <thead>

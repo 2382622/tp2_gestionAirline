@@ -22,6 +22,7 @@ class Vol extends Model
         'prix',
         'efface',
         'avion_id',
+         'photo', 
     ];
 
     // Relation : un vol appartient à un avion
