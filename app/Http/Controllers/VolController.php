@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Vol;
 use App\Models\Avion;
 use Illuminate\Support\Facades\Validator;
-
 
 class VolController extends Controller
 {
@@ -18,7 +16,10 @@ class VolController extends Controller
      */
     public function index()
     {
+        // Récupère les vols + leur avion, triés par plus récent
         $vols = Vol::with('avion')->latest()->paginate(10);
+
+        // Envoie à la vue index
         return view('vols.index', compact('vols'));
     }
 
@@ -29,7 +30,9 @@ class VolController extends Controller
      */
     public function create()
     {
-        $avions = Avion::all(); 
+        // Récupère la liste des avions pour le <select>
+        $avions = Avion::all();
+
         return view('vols.create', compact('avions'));
     }
 
@@ -41,14 +44,15 @@ class VolController extends Controller
      */
     public function store(Request $request)
     {
+        // Valide les champs soumis
         $validator = Validator::make($request->all(), [
-            'id'          => 'required|string|unique:vols,id',
-            'origine'     => 'required|string|max:255',
+            'id' => 'required|string|unique:vols,id',
+            'origine' => 'required|string|max:255',
             'destination' => 'required|string|max:255',
             'date_depart' => 'required|date',
             'date_arrive' => 'required|date|after:date_depart',
-            'prix'        => 'required|numeric|min:0',
-            'avion_id'    => 'required|exists:avions,id',
+            'prix' => 'required|numeric|min:0',
+            'avion_id' => 'required|exists:avions,id',
         ]);
 
         if ($validator->fails()) {
@@ -58,30 +62,38 @@ class VolController extends Controller
                 ->with('warning', 'Tous les champs sont requis');
         }
 
+        // Crée l’enregistrement
         Vol::create($request->all());
+
         return redirect()->route('vols.index')->with('success', 'Vol ajouté avec succès');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(string $id)
     {
-         return view('vols.show', compact('vol'));
+        // Cherche le vol par ID (404 si introuvable)
+        $vol = Vol::with('avion')->findOrFail($id);
+
+        return view('vols.show', compact('vol'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(string $id)
     {
-         $avions = Avion::all();
+        // Récupère le vol et la liste des avions
+        $vol = Vol::findOrFail($id);
+        $avions = Avion::all();
+
         return view('vols.edit', compact('vol', 'avions'));
     }
 
@@ -89,18 +101,19 @@ class VolController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $vol
+     * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $vol)
+    public function update(Request $request, string $id)
     {
+        // Valide les champs
         $validator = Validator::make($request->all(), [
-            'origine'     => 'required|string|max:255',
+            'origine' => 'required|string|max:255',
             'destination' => 'required|string|max:255',
             'date_depart' => 'required|date',
             'date_arrive' => 'required|date|after:date_depart',
-            'prix'        => 'required|numeric|min:0',
-            'avion_id'    => 'required|exists:avions,id',
+            'prix' => 'required|numeric|min:0',
+            'avion_id' => 'required|exists:avions,id',
         ]);
 
         if ($validator->fails()) {
@@ -110,19 +123,25 @@ class VolController extends Controller
                 ->with('warning', 'Tous les champs sont requis');
         }
 
+        // Charge le vol puis met à jour
+        $vol = Vol::findOrFail($id);
         $vol->update($request->all());
+
         return redirect()->route('vols.index')->with('success', 'Vol modifié avec succès');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $ivol
+     * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($vol)
+    public function destroy(string $id)
     {
-         $vol->delete();
+        // Supprime le vol ciblé
+        $vol = Vol::findOrFail($id);
+        $vol->delete();
+
         return redirect()->route('vols.index')->with('success', 'Vol supprimé avec succès');
     }
 }
