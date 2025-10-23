@@ -1,0 +1,37 @@
+<?php
+return [
+
+    'titre_accueil' => 'Vuelos desde Montreal',
+    'date_depart' => 'Fecha de salida',
+    'date_arrivee' => 'Fecha de llegada',
+    'prix' => 'Precio',
+    'aucun_vol' => 'No se encontraron vuelos desde Montreal.',
+    
+    'liste_vols' => 'Lista de vuelos',
+    'id' => 'ID',
+    'id_vol' => 'ID del vuelo',
+    'origine' => 'Origen',
+    'destination' => 'Destino',
+    'prix_dollar' => 'Precio ($)',
+    'avion' => 'Avión',
+    'choisir_avion' => '-- Elegir un avión --',
+    'photo_vol' => 'Foto del vuelo',
+    'formats_autorises' => 'Formatos permitidos: JPG, PNG, GIF, SVG',
+    'enregistrer' => 'Guardar',
+    'annuler' => 'Cancelar',
+    'modifier_vol' => 'Modificar el vuelo',
+    'photo_actuelle' => 'Foto actual',
+    'aucune_photo' => 'Ninguna foto registrada',
+    'changer_photo' => 'Cambiar la foto',
+    'details_vol' => 'Detalles del vuelo',
+    'retour_liste' => 'Volver a la lista',
+    'actions' => 'Acciones',
+    'voir' => 'Ver',
+    'modifier' => 'Modificar',
+    'supprimer' => 'Eliminar',
+    'aucun_vol_trouve' => 'No se encontró ningún vuelo',
+    'non_assigne' => 'No asignado',
+    'confirmer_suppression' => '¿Eliminar este vuelo?',
+    'creer_vol' => 'Crear un vuelo',
+
+];
