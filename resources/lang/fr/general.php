@@ -27,4 +27,12 @@ return [
     'aucune_photo' => 'Aucune photo enregistrée',
     'changer_photo' => 'Changer la photo',
 
+    // Détails (show)
+    'details_vol'     => 'Détails du vol',
+    'non_assigne'     => 'Non assigné',
+    'modifier'        => 'Modifier',
+    'supprimer'       => 'Supprimer',
+    'retour_liste'    => 'Retour à la liste',
+    'confirmer_suppression' => 'Supprimer ce vol ?',
+
 ];

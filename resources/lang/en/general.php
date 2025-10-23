@@ -27,4 +27,13 @@ return [
     'aucune_photo' => 'No photo available',
     'changer_photo' => 'Change Photo',
 
+     // Details (show)
+    'details_vol'     => 'Flight Details',
+    'non_assigne'     => 'Unassigned',
+    'modifier'        => 'Edit',
+    'supprimer'       => 'Delete',
+    'retour_liste'    => 'Back to list',
+    'confirmer_suppression' => 'Delete this flight?',
+
+
 ];
