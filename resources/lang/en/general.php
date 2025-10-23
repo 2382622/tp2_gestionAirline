@@ -1,39 +1,37 @@
 <?php
 return [
 
-    // Home 
     'titre_accueil' => 'Flights from Montreal',
     'date_depart' => 'Departure Date',
     'date_arrivee' => 'Arrival Date',
     'prix' => 'Price',
     'aucun_vol' => 'No flights found for Montreal.',
 
-    // Create a flight
-    'creer_vol' => 'Create a Flight',
+    'liste_vols' => 'Flight List',
+    'id' => 'ID',
     'id_vol' => 'Flight ID',
     'origine' => 'Origin',
     'destination' => 'Destination',
     'prix_dollar' => 'Price ($)',
     'avion' => 'Plane',
-    'choisir_avion' => '-- Choose a plane --',
+    'choisir_avion' => '-- Choose a Plane --',
     'photo_vol' => 'Flight Photo',
     'formats_autorises' => 'Allowed formats: JPG, PNG, GIF, SVG',
     'enregistrer' => 'Save',
     'annuler' => 'Cancel',
-
-    // Edit a flight
     'modifier_vol' => 'Edit Flight',
     'photo_actuelle' => 'Current Photo',
     'aucune_photo' => 'No photo available',
     'changer_photo' => 'Change Photo',
-
-     // Details (show)
-    'details_vol'     => 'Flight Details',
-    'non_assigne'     => 'Unassigned',
-    'modifier'        => 'Edit',
-    'supprimer'       => 'Delete',
-    'retour_liste'    => 'Back to list',
+    'details_vol' => 'Flight Details',
+    'retour_liste' => 'Back to List',
+    'actions' => 'Actions',
+    'voir' => 'View',
+    'modifier' => 'Edit',
+    'supprimer' => 'Delete',
+    'aucun_vol_trouve' => 'No flights found',
+    'non_assigne' => 'Unassigned',
     'confirmer_suppression' => 'Delete this flight?',
-
+    'creer_vol' => 'Create a Flight',
 
 ];

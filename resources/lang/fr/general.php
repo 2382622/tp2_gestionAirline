@@ -1,15 +1,14 @@
 <?php
 return [
 
-    // Accueil
     'titre_accueil' => 'Vols en provenance de Montréal',
     'date_depart' => 'Date de départ',
     'date_arrivee' => 'Date d’arrivée',
     'prix' => 'Prix',
     'aucun_vol' => 'Aucun vol trouvé pour Montréal.',
-
-    // Création d’un vol
-    'creer_vol' => 'Créer un vol',
+    
+    'liste_vols' => 'Liste des vols',
+    'id' => 'ID',
     'id_vol' => 'ID du vol',
     'origine' => 'Origine',
     'destination' => 'Destination',
@@ -20,19 +19,19 @@ return [
     'formats_autorises' => 'Formats autorisés : JPG, PNG, GIF, SVG',
     'enregistrer' => 'Enregistrer',
     'annuler' => 'Annuler',
-
-    // Modification d’un vol
     'modifier_vol' => 'Modifier le vol',
     'photo_actuelle' => 'Photo actuelle',
     'aucune_photo' => 'Aucune photo enregistrée',
     'changer_photo' => 'Changer la photo',
-
-    // Détails (show)
-    'details_vol'     => 'Détails du vol',
-    'non_assigne'     => 'Non assigné',
-    'modifier'        => 'Modifier',
-    'supprimer'       => 'Supprimer',
-    'retour_liste'    => 'Retour à la liste',
+    'details_vol' => 'Détails du vol',
+    'retour_liste' => 'Retour à la liste',
+    'actions' => 'Actions',
+    'voir' => 'Voir',
+    'modifier' => 'Modifier',
+    'supprimer' => 'Supprimer',
+    'aucun_vol_trouve' => 'Aucun vol trouvé',
+    'non_assigne' => 'Non assigné',
     'confirmer_suppression' => 'Supprimer ce vol ?',
+    'creer_vol' => 'Créer un vol',
 
 ];
