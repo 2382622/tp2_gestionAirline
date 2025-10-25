@@ -17,6 +17,9 @@
                 <a class="navbar-brand" href="{{ url('/') }}">Accueil</a>
                 <a class="navbar-brand" href="{{ url('/avions') }}">Avions</a>
                 <a class="navbar-brand" href="{{ url('/vols') }}">Vols</a>
+                <a class="nav-link" href="{{ route('login') }}">{{ __('Connexion') }}</a>
+                <a class="nav-link" href="{{ route('register') }}">{{ __('Inscription') }}</a>
+
 
                 <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#langNav" aria-controls="langNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
