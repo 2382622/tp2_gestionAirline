@@ -45,17 +45,19 @@
                         <a href="{{ route('vols.show', $vol->id) }}" class="btn btn-info btn-sm">
                             @lang('general.voir')
                         </a>
-                        <a href="{{ route('vols.edit', $vol->id) }}" class="btn btn-warning btn-sm">
-                            @lang('general.modifier')
-                        </a>
-                        <form action="{{ route('vols.destroy', $vol->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm"
-                                onclick="return confirm('@lang('general.confirmer_suppression')')">
-                                @lang('general.supprimer')
-                            </button>
-                        </form>
+                        @if (Auth::user()->role === 'admin')
+                            <a href="{{ route('vols.edit', $vol->id) }}" class="btn btn-warning btn-sm">
+                                @lang('general.modifier')
+                            </a>
+                            <form action="{{ route('vols.destroy', $vol->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('@lang('general.confirmer_suppression')')">
+                                    @lang('general.supprimer')
+                                </button>
+                            </form>
+                        @endif
                     </td>
                 </tr>
             @empty

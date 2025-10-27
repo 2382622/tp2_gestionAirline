@@ -31,18 +31,19 @@
                 </div>
             </div>
 
-            <div class="mt-3">
-                <a href="{{ route('vols.edit', $vol->id) }}" class="btn btn-warning">@lang('general.modifier')</a>
+                <div class="mt-3">
+                @if (Auth::user()->role === 'admin')
+                    <a href="{{ route('vols.edit', $vol->id) }}" class="btn btn-warning">@lang('general.modifier')</a>
 
-                <form action="{{ route('vols.destroy', $vol->id) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger"
-                            onclick="return confirm('@lang('general.confirmer_suppression')')">
-                        @lang('general.supprimer')
-                    </button>
-                </form>
-
+                    <form action="{{ route('vols.destroy', $vol->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('@lang('general.confirmer_suppression')')">
+                            @lang('general.supprimer')
+                        </button>
+                    </form>
+                @endif
                 <a href="{{ route('vols.index') }}" class="btn btn-secondary">@lang('general.retour_liste')</a>
             </div>
         </div>
