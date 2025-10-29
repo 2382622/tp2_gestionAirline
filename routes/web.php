@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AvionController;
 use App\Http\Controllers\VolController;
 use App\Http\Controllers\AccueilController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\AdminTicketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,10 +36,9 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('tickets', AdminTicketController::class);
+});
+Route::middleware('auth')->group(function () {
+    Route::resource('tickets', TicketController::class);
+});
