@@ -189,4 +189,28 @@ class VolController extends Controller
 
         return redirect()->route('vols.index')->with('success', 'Vol supprimé avec succès');
     }
+public function autocomplete(Request $request)
+{
+    $search = $request->search;
+
+    $vols = Vol::orderBy('id', 'asc')
+        ->select('id', 'origine', 'destination', 'date_depart')
+        ->where('id', 'LIKE', '%' . $search . '%')
+        ->orWhere('origine', 'LIKE', '%' . $search . '%')
+        ->orWhere('destination', 'LIKE', '%' . $search . '%')
+        ->get();
+
+    $response = array();
+
+    foreach ($vols as $vol) {
+        $response[] = array(
+            'value' => $vol->id,
+            'label' => $vol->id . ' - ' . $vol->origine . ' → ' . $vol->destination . ' (' . $vol->date_depart . ')'
+        );
+    }
+
+    return response()->json($response);
+}
+
+    
 }

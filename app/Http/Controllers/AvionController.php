@@ -124,4 +124,28 @@ class AvionController extends Controller
 
         return redirect()->route('avions.index')->with('success', 'Avion supprimé avec succès');
     }
+
+    public function autocomplete(Request $request)
+{
+    $search = $request->search;
+
+    $avions = Avion::orderBy('modele', 'asc')
+        ->select('id', 'modele', 'capacite', 'compagnie')
+        ->where('modele', 'LIKE', '%' . $search . '%')
+        ->orWhere('compagnie', 'LIKE', '%' . $search . '%')
+        ->orWhere('id', 'LIKE', '%' . $search . '%')
+        ->get();
+
+    $response = array();
+
+    foreach ($avions as $avion) {
+        $response[] = array(
+            'value' => $avion->id,
+            'label' => $avion->modele . ' (' . $avion->compagnie . ') — ' . $avion->capacite . ' places'
+        );
+    }
+
+    return response()->json($response);
+}
+
 }
