@@ -20,7 +20,6 @@ use App\Http\Controllers\AdminTicketController;
 
 // redirige vers les avions ou vols 
 Route::get('/', [AccueilController::class, 'index'])->name('accueil');
-Route::post('/autocomplete/avions', [AvionController::class, 'autocomplete'])->name('avions.autocomplete');
 Route::post('/autocomplete/vols', [VolController::class, 'autocomplete'])->name('vols.autocomplete');
 Route::get('lang/{locale}', [App\Http\Controllers\LocalizationController::class, 'index']);
 

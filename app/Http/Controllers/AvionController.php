@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Avion;               
+use App\Models\Avion;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 
@@ -16,9 +16,9 @@ class AvionController extends Controller
      */
     public function index()
     {
-        
-    $avions = Avion::latest()->paginate(10);
-    return view('avions.index', compact('avions'));
+
+        $avions = Avion::latest()->paginate(10);
+        return view('avions.index', compact('avions'));
     }
 
     /**
@@ -28,7 +28,7 @@ class AvionController extends Controller
      */
     public function create()
     {
-          return view('avions.create');
+        return view('avions.create');
     }
 
     /**
@@ -39,25 +39,25 @@ class AvionController extends Controller
      */
     public function store(Request $request)
     {
-    // Validation des champs
-    $validator = Validator::make($request->all(), [
-        'modele'   => 'required|string|max:255',
-        'capacite' => 'required|integer|min:1',
-    ]);
+        // Validation des champs
+        $validator = Validator::make($request->all(), [
+            'modele' => 'required|string|max:255',
+            'capacite' => 'required|integer|min:1',
+        ]);
 
-    // Si échec de validation
-    if ($validator->fails()) {
-        return redirect()->back()
-            ->with('warning', 'Tous les champs sont requis')
-            ->withErrors($validator);
+        // Si échec de validation
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->with('warning', 'Tous les champs sont requis')
+                ->withErrors($validator);
+        }
+
+        // Création 
+        Avion::create($request->all());
+
+        // Redirection avec message de succès
+        return redirect()->route('avions.index')->with('success', 'Avion ajouté avec succès');
     }
-
-    // Création 
-    Avion::create($request->all());
-
-    // Redirection avec message de succès
-    return redirect()->route('avions.index')->with('success', 'Avion ajouté avec succès');
-}
 
     /**
      * Display the specified resource.
@@ -67,7 +67,7 @@ class AvionController extends Controller
      */
     public function show($id)
     {
-             $avion = Avion::findOrFail($id);
+        $avion = Avion::findOrFail($id);
         return view('avions.show', compact('avion'));
     }
 
@@ -79,7 +79,7 @@ class AvionController extends Controller
      */
     public function edit($id)
     {
-         $avion = Avion::findOrFail($id);
+        $avion = Avion::findOrFail($id);
         return view('avions.edit', compact('avion'));
     }
 
@@ -95,16 +95,16 @@ class AvionController extends Controller
         $avion = Avion::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'modele'   => 'required|string|max:255',
+            'modele' => 'required|string|max:255',
             'capacite' => 'required|integer|min:1',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()
-                ->with('warning','Tous les champs sont requis')
+                ->with('warning', 'Tous les champs sont requis')
                 ->withErrors($validator);
-                        
-               
+
+
         }
 
         $avion->update($request->all());
@@ -119,33 +119,11 @@ class AvionController extends Controller
      */
     public function destroy($id)
     {
-         $avion = Avion::findOrFail($id);
+        $avion = Avion::findOrFail($id);
         $avion->delete();
 
         return redirect()->route('avions.index')->with('success', 'Avion supprimé avec succès');
     }
 
-    public function autocomplete(Request $request)
-{
-    $search = $request->search;
-
-    $avions = Avion::orderBy('modele', 'asc')
-        ->select('id', 'modele', 'capacite', 'compagnie')
-        ->where('modele', 'LIKE', '%' . $search . '%')
-        ->orWhere('compagnie', 'LIKE', '%' . $search . '%')
-        ->orWhere('id', 'LIKE', '%' . $search . '%')
-        ->get();
-
-    $response = array();
-
-    foreach ($avions as $avion) {
-        $response[] = array(
-            'value' => $avion->id,
-            'label' => $avion->modele . ' (' . $avion->compagnie . ') — ' . $avion->capacite . ' places'
-        );
-    }
-
-    return response()->json($response);
-}
 
 }
