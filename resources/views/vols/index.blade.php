@@ -86,3 +86,45 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(function () {
+        const $search = $('#vol_search');
+        if (!$search.length) {
+            return;
+        }
+
+        $search.autocomplete({
+            minLength: 2,
+            delay: 200,
+            source: function (request, response) {
+                $.ajax({
+                    url: '{{ route('vols.autocomplete') }}',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        search: request.term,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: response,
+                    error: function () {
+                        response([]);
+                    }
+                });
+            },
+            select: function (event, ui) {
+                if (!ui.item || !ui.item.value) {
+                    return false;
+                }
+
+                $search.val(ui.item.label);
+                window.location.href = "{{ url('vols') }}/" + encodeURIComponent(ui.item.value);
+                return false;
+            }
+        }).autocomplete('instance')._renderItem = function (ul, item) {
+            return $('<li>').append('<div>' + item.label + '</div>').appendTo(ul);
+        };
+    });
+</script>
+@endpush
