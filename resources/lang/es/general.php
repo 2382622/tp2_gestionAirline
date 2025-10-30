@@ -6,7 +6,7 @@ return [
     'date_arrivee' => 'Fecha de llegada',
     'prix' => 'Precio',
     'aucun_vol' => 'No se encontraron vuelos desde Montreal.',
-    
+
     'liste_vols' => 'Lista de vuelos',
     'id' => 'ID',
     'id_vol' => 'ID del vuelo',
@@ -33,5 +33,19 @@ return [
     'non_assigne' => 'No asignado',
     'confirmer_suppression' => '¿Eliminar este vuelo?',
     'creer_vol' => 'Crear un vuelo',
+    'rechercher_vol' => 'Buscar un vuelo...',
+    'connexion' => 'Iniciar sesión',
+    'inscription' => 'Registrarse',
+
+    'accueil' => 'Inicio',
+    'vols' => 'Vuelos',
+    'avions' => 'Aviones',
+    'tickets' => 'Boletos',
+    'tickets_admin' => 'Boletos (Admin)',
+    'a_propos' => 'Acerca de',
+    'langue' => 'Idioma',
+    'lang_fr' => 'Francés',
+    'lang_en' => 'Inglés',
+    'lang_es' => 'Español',
 
 ];

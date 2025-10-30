@@ -33,5 +33,19 @@ return [
     'non_assigne' => 'Unassigned',
     'confirmer_suppression' => 'Delete this flight?',
     'creer_vol' => 'Create a Flight',
+    'rechercher_vol' => 'Search for a flight...',
+    'connexion' => 'Login',
+    'inscription' => 'Register',
+
+    'accueil' => 'Home',
+    'vols' => 'Flights',
+    'avions' => 'Planes',
+    'tickets' => 'Tickets',
+    'tickets_admin' => 'Tickets (Admin)',
+    'a_propos' => 'About',
+    'langue' => 'Language',
+    'lang_fr' => 'French',
+    'lang_en' => 'English',
+    'lang_es' => 'Spanish',
 
 ];

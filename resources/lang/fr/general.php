@@ -6,7 +6,7 @@ return [
     'date_arrivee' => 'Date d’arrivée',
     'prix' => 'Prix',
     'aucun_vol' => 'Aucun vol trouvé pour Montréal.',
-    
+
     'liste_vols' => 'Liste des vols',
     'id' => 'ID',
     'id_vol' => 'ID du vol',
@@ -33,5 +33,19 @@ return [
     'non_assigne' => 'Non assigné',
     'confirmer_suppression' => 'Supprimer ce vol ?',
     'creer_vol' => 'Créer un vol',
+    'rechercher_vol' => 'Rechercher un vol...',
+    'connexion' => 'Connexion',
+    'inscription' => 'Inscription',
+
+    'accueil' => 'Accueil',
+    'vols' => 'Vols',
+    'avions' => 'Avions',
+    'tickets' => 'Billets',
+    'tickets_admin' => 'Billets (Admin)',
+    'a_propos' => 'À propos',
+    'langue' => 'Langue',
+    'lang_fr' => 'Français',
+    'lang_en' => 'Anglais',
+    'lang_es' => 'Espagnol',
 
 ];

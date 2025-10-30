@@ -7,7 +7,7 @@
 
     <title>Gestion Airline</title>
 
-    {{-- CSRF token (utile si tu fais des requêtes AJAX) --}}
+    {{-- CSRF token (utile pour les requêtes AJAX) --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -20,17 +20,17 @@
         <nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm">
             <div class="container">
                 {{-- Liens de navigation principaux --}}
-                <a class="navbar-brand" href="{{ route('accueil') }}">Accueil</a>
-                <a class="navbar-brand" href="{{ route('vols.index') }}">Vols</a>
+                <a class="navbar-brand" href="{{ route('accueil') }}">@lang('general.accueil')</a>
+                <a class="navbar-brand" href="{{ route('vols.index') }}">@lang('general.vols')</a>
 
-                {{-- Tickets : visible seulement pour les utilisateurs connectés --}}
+                {{-- Tickets : visibles seulement pour les utilisateurs connectés --}}
                 @auth
-                    <a class="navbar-brand" href="{{ route('tickets.index') }}">Tickets</a>
+                    <a class="navbar-brand" href="{{ route('tickets.index') }}">@lang('general.tickets')</a>
                 @endauth
                 @auth
                     @if(auth()->user()->role === 'admin')
-                        <a class="navbar-brand" href="{{ route('avions.index') }}">Avions</a>
-                        <a class="navbar-brand" href="{{ route('admin.tickets.index') }}">Tickets (Admin)</a>
+                        <a class="navbar-brand" href="{{ route('avions.index') }}">@lang('general.avions')</a>
+                        <a class="navbar-brand" href="{{ route('admin.tickets.index') }}">@lang('general.tickets_admin')</a>
                     @endif
                 @endauth
 
@@ -52,7 +52,7 @@
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        @lang('general.deconnexion')
                                     </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
@@ -63,41 +63,38 @@
 
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Connexion') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">@lang('general.connexion')</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Inscription') }}</a>
+                                <a class="nav-link" href="{{ route('register') }}">@lang('general.inscription')</a>
                             </li>
-
-
-
                         @endguest
 
                         {{-- Sélecteur de langue --}}
                         <li class="nav-item dropdown ms-2">
                             <button class="btn btn-outline-secondary dropdown-toggle" type="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                Langue ({{ strtoupper(app()->getLocale()) }})
+                                @lang('general.langue') ({{ strtoupper(app()->getLocale()) }})
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{{ url('lang/fr') }}">Français</a></li>
-                                <li><a class="dropdown-item" href="{{ url('lang/en') }}">English</a></li>
-                                <li><a class="dropdown-item" href="{{ url('lang/es') }}">Español</a></li>
+                                <li><a class="dropdown-item" href="{{ url('lang/fr') }}">@lang('general.lang_fr')</a>
+                                </li>
+                                <li><a class="dropdown-item" href="{{ url('lang/en') }}">@lang('general.lang_en')</a>
+                                </li>
+                                <li><a class="dropdown-item" href="{{ url('lang/es') }}">@lang('general.lang_es')</a>
+                                </li>
                             </ul>
-                            <a class="navbar-brand" href="{{ url('/apropos') }}">À propos</a>
+                            <a class="navbar-brand" href="{{ url('/apropos') }}">@lang('general.a_propos')</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
 
-
         <main class="py-4 container">
             @yield('content')
         </main>
     </div>
-
-
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -105,7 +102,5 @@
 
     @stack('scripts')
 </body>
-
-
 
 </html>
