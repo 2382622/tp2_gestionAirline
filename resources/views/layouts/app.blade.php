@@ -21,7 +21,6 @@
             <div class="container">
                 {{-- Liens de navigation principaux --}}
                 <a class="navbar-brand" href="{{ route('accueil') }}">Accueil</a>
-                <a class="navbar-brand" href="{{ route('avions.index') }}">Avions</a>
                 <a class="navbar-brand" href="{{ route('vols.index') }}">Vols</a>
 
                 {{-- Tickets : visible seulement pour les utilisateurs connectés --}}
@@ -30,6 +29,7 @@
                 @endauth
                 @auth
                     @if(auth()->user()->role === 'admin')
+                        <a class="navbar-brand" href="{{ route('avions.index') }}">Avions</a>
                         <a class="navbar-brand" href="{{ route('admin.tickets.index') }}">Tickets (Admin)</a>
                     @endif
                 @endauth
