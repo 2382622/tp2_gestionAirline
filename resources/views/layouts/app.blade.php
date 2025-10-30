@@ -26,12 +26,12 @@
 
                 {{-- Tickets : visible seulement pour les utilisateurs connectés --}}
                 @auth
-                <a class="navbar-brand" href="{{ route('tickets.index') }}">Tickets</a>
+                    <a class="navbar-brand" href="{{ route('tickets.index') }}">Tickets</a>
                 @endauth
                 @auth
-                @if(auth()->user()->role === 'admin')
-                <a class="navbar-brand" href="{{ route('admin.tickets.index') }}">Tickets (Admin)</a>
-                @endif
+                    @if(auth()->user()->role === 'admin')
+                        <a class="navbar-brand" href="{{ route('admin.tickets.index') }}">Tickets (Admin)</a>
+                    @endif
                 @endauth
 
                 <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
@@ -44,30 +44,33 @@
                     <ul class="navbar-nav ms-auto align-items-center">
                         {{-- Zone Auth --}}
                         @auth
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }}
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }}
                                 </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-                        </li>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
                         @endauth
 
                         @guest
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Connexion') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Inscription') }}</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Connexion') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('Inscription') }}</a>
+                            </li>
+
+
+
                         @endguest
 
                         {{-- Sélecteur de langue --}}
@@ -81,20 +84,26 @@
                                 <li><a class="dropdown-item" href="{{ url('lang/en') }}">English</a></li>
                                 <li><a class="dropdown-item" href="{{ url('lang/es') }}">Español</a></li>
                             </ul>
+                            <a class="navbar-brand" href="{{ url('/apropos') }}">À propos</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
 
+
         <main class="py-4 container">
             @yield('content')
         </main>
     </div>
 
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
+
 
 </html>
