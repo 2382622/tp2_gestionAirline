@@ -35,7 +35,7 @@
   <div class="card-ga">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h1 class="h5 h-title mb-0">Éditer le ticket</h1>
+      <h1 class="h5 h-title mb-0">@lang('tickets.title_edit')</h1>
       <span class="badge-soft">#{{ $ticket->id }}</span>
     </div>
 
@@ -54,47 +54,46 @@
 
       {{-- Vol --}}
       <div class="mb-4">
-        <label class="form-label">Vol</label>
+        <label class="form-label">@lang('tickets.flight')</label>
         <select name="vol_id" class="form-select" required>
           @foreach ($vols as $v)
             <option value="{{ $v->id }}" @selected(old('vol_id', $ticket->vol_id) == $v->id)>
               {{ trim($v->origine) }} → {{ trim($v->destination) }}
-              — Départ : {{ \Carbon\Carbon::parse($v->date_depart)->format('d/m/Y H:i') }}
-              — Numéro de vol : {{ $v->numero_vol ?? 'V-' . str_pad($v->id, 3, '0', STR_PAD_LEFT) }}
+              — @lang('tickets.departure') : {{ \Carbon\Carbon::parse($v->date_depart)->translatedFormat('d/m/Y H:i') }}
+              — @lang('tickets.flight_number') : {{ $v->numero_vol ?? 'V-' . str_pad($v->id, 3, '0', STR_PAD_LEFT) }}
             </option>
           @endforeach
         </select>
-        <div class="help mt-1">Choisissez le vol à associer à ce ticket.</div>
+        <div class="help mt-1">@lang('tickets.flight_help')</div>
       </div>
 
       {{-- Quantité --}}
       <div class="mb-4">
-        <label class="form-label">Quantité</label>
-        <input
-          type="number" name="quantite" min="1" class="form-control"
-          value="{{ old('quantite', $ticket->quantite) }}" required>
-        <div class="help mt-1">Nombre de billets pour ce ticket.</div>
+        <label class="form-label">@lang('tickets.quantity')</label>
+        <input type="number" name="quantite" min="1" class="form-control"
+               value="{{ old('quantite', $ticket->quantite) }}" required>
+        <div class="help mt-1">@lang('tickets.quantity_help')</div>
       </div>
 
-      {{-- Utilisateur (optionnel) --}}
+      {{-- Utilisateur --}}
       @isset($users)
         <div class="mb-4">
-          <label class="form-label">👤 Utilisateur (optionnel)</label>
+          <label class="form-label">👤 @lang('tickets.user_optional')</label>
           <select name="user_id" class="form-select">
-            <option value="">— Aucun —</option>
+            <option value="">— @lang('tickets.none') —</option>
             @foreach ($users as $u)
               <option value="{{ $u->id }}" @selected(old('user_id', $ticket->user_id) == $u->id)>
                 {{ $u->name }}
               </option>
             @endforeach
           </select>
-          <div class="help mt-1">Laissez vide pour conserver l’utilisateur actuel ou aucun.</div>
+          <div class="help mt-1">@lang('tickets.user_help')</div>
         </div>
       @endisset
 
       <div class="d-flex gap-2">
-        <button class="btn btn-warning px-4">Mettre à jour</button>
-        <a href="{{ route('tickets.index') }}" class="btn btn-secondary px-4">Annuler</a>
+        <button class="btn btn-warning px-4">@lang('tickets.update')</button>
+        <a href="{{ route('tickets.index') }}" class="btn btn-secondary px-4">@lang('tickets.cancel')</a>
       </div>
     </form>
   </div>

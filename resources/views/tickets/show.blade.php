@@ -41,7 +41,7 @@
 
     {{-- Header --}}
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-      <h1 class="h4 m-0 fw-bold">Ticket</h1>
+      <h1 class="h4 m-0 fw-bold">@lang('tickets.title_show')</h1>
       <span class="badge-soft badge-id">#{{ $ticket->id }}</span>
     </div>
 
@@ -52,7 +52,7 @@
         <div class="dl">
           {{-- Vol --}}
           <div class="mb-3">
-            <dt>Vol</dt>
+            <dt>@lang('tickets.flight')</dt>
             <dd class="mb-2">
               @if($ticket->vol)
                 <div class="fw-semibold">
@@ -62,62 +62,14 @@
                   </span>
                 </div>
                 <div class="meta small">
-                  Départ : {{ \Carbon\Carbon::parse($ticket->vol->date_depart)->format('d/m/Y H:i') }}<br>
-                  Arrivée : {{ \Carbon\Carbon::parse($ticket->vol->date_arrive)->format('d/m/Y H:i') }}
+                  @lang('tickets.departure') : {{ \Carbon\Carbon::parse($ticket->vol->date_depart)->translatedFormat('d/m/Y H:i') }}<br>
+                  @lang('tickets.arrival') : {{ \Carbon\Carbon::parse($ticket->vol->date_arrive)->translatedFormat('d/m/Y H:i') }}
                 </div>
               @else
-                <em class="text-muted">Vol supprimé</em>
+                <em class="text-muted">@lang('tickets.flight_deleted')</em>
               @endif
             </dd>
           </div>
 
           {{-- Utilisateur --}}
-          <div class="mb-3">
-            <dt>Utilisateur</dt>
-            <dd>{{ optional($ticket->user)->name ?? '—' }}</dd>
-          </div>
-
-          {{-- Quantité --}}
-          <div class="mb-3">
-            <dt>Quantité</dt>
-            <dd><span class="badge-soft badge-qty">{{ $ticket->quantite }}</span></dd>
-          </div>
-
-          {{-- Dates système --}}
-          <div class="mb-3">
-            <dt>Créé</dt>
-            <dd>{{ optional($ticket->created_at)->format('d/m/Y H:i') }}</dd>
-            <dt>Mis à jour</dt>
-            <dd>{{ optional($ticket->updated_at)->format('d/m/Y H:i') }}</dd>
-          </div>
-        </div>
-      </div>
-
-      {{-- Col droite : visuel du vol (si dispo) --}}
-      <div class="col-12 col-lg-5">
-        @if($ticket->vol && $ticket->vol->photo)
-          <img
-            src="{{ asset('storage/images/upload/'.$ticket->vol->photo) }}"
-            alt="Photo vol {{ $ticket->vol->id }}"
-            class="img-fluid img-vol w-100">
-        @else
-          <div class="border rounded-3 p-4 h-100 d-flex align-items-center justify-content-center text-muted">
-            Aucune photo disponible
-          </div>
-        @endif
-      </div>
-    </div>
-
-    {{-- Actions --}}
-    <div class="d-flex flex-wrap gap-2 mt-4">
-      <a href="{{ route('tickets.edit', $ticket->id) }}" class="btn btn-warning">Éditer</a>
-      <form action="{{ route('tickets.destroy', $ticket->id) }}" method="POST"
-            onsubmit="return confirm('Supprimer ce ticket ?');">
-        @csrf @method('DELETE')
-        <button class="btn btn-danger">Supprimer</button>
-      </form>
-      <a href="{{ route('tickets.index') }}" class="btn btn-secondary">Retour</a>
-    </div>
-  </div>
-</div>
-@endsection
+          <div class="mb
