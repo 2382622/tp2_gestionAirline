@@ -14,7 +14,7 @@
                             </div>
                         @endif
 
-                        {{ __('You are logged in!') }}
+                        @lang('general.logged')
                     </div>
                 </div>
             </div>

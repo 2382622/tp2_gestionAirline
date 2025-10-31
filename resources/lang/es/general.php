@@ -49,5 +49,6 @@ return [
     'lang_en' => 'Inglés',
     'lang_es' => 'Español',
 
-    'rights'=>'Gestion Airline. Reservados todos los derechos'
+    'rights'=>'Gestion Airline. Reservados todos los derechos',
+    'logged'=>'¡Has iniciado sesión!'
 ];

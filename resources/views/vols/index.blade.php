@@ -210,12 +210,14 @@
         {{-- Barre de recherche + bouton créer --}}
         <div class="topbar">
             <input id="vol_search" type="text" class="search-input" placeholder="@lang('general.rechercher_vol')">
-            <a href="{{ route('vols.create') }}" class="cta-create">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2" stroke-linecap="round" />
-                </svg>
-                @lang('general.creer_vol')
-            </a>
+            @if(auth()->check() && optional(auth()->user())->role === 'admin')
+                <a href="{{ route('vols.create') }}" class="cta-create">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    @lang('general.creer_vol')
+                </a>
+            @endif
         </div>
 
         {{-- Flash succès --}}
