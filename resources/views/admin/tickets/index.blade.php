@@ -34,9 +34,11 @@
 
     {{-- En-tête --}}
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 toolbar">
-      <h1 class="h3 mb-0 fw-bold">Tickets — Administration</h1>
+      <h1 class="h3 mb-0 fw-bold">@lang('ticketAdmin.title_index')</h1>
       <div class="d-flex align-items-center toolbar">
-        <a href="{{ route('admin.tickets.create') }}" class="btn btn-primary">Nouveau ticket</a>
+        <a href="{{ route('admin.tickets.create') }}" class="btn btn-primary">
+          @lang('ticketAdmin.new_ticket')
+        </a>
       </div>
     </div>
 
@@ -58,12 +60,12 @@
       <table class="table table-striped align-middle">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Vol</th>
-            <th>Client</th>
-            <th>Quantité</th>
-            <th>Créé</th>
-            <th class="text-end">Actions</th>
+            <th>@lang('ticketAdmin.columns.id')</th>
+            <th>@lang('ticketAdmin.columns.flight')</th>
+            <th>@lang('ticketAdmin.columns.user')</th>
+            <th>@lang('ticketAdmin.columns.quantity')</th>
+            <th>@lang('ticketAdmin.columns.created')</th>
+            <th class="text-end">@lang('ticketAdmin.columns.actions')</th>
           </tr>
         </thead>
         <tbody>
@@ -74,36 +76,42 @@
               <td>
                 @if($t->vol)
                   <div class="small text-muted">ID: {{ $t->vol->id }}</div>
-                  {{ $t->vol->origine }} → {{ $t->vol->destination }}
+                  {{ trim($t->vol->origine) }} → {{ trim($t->vol->destination) }}
                   <div class="small text-muted">
-                    {{ \Illuminate\Support\Carbon::parse($t->vol->date_depart)->format('Y-m-d H:i') }}
+                    {{ \Illuminate\Support\Carbon::parse($t->vol->date_depart)->translatedFormat('Y-m-d H:i') }}
                   </div>
                 @else
-                  <em class="text-muted">Vol supprimé</em>
+                  <em class="text-muted">@lang('ticketAdmin.flight_deleted')</em>
                 @endif
               </td>
 
               <td>{{ optional($t->user)->name ?? '—' }}</td>
               <td>{{ $t->quantite }}</td>
-              <td>{{ optional($t->created_at)->format('Y-m-d H:i') }}</td>
+              <td>{{ optional($t->created_at)->translatedFormat('Y-m-d H:i') }}</td>
 
               <td class="text-end">
-                <a href="{{ route('admin.tickets.show',  $t->id) }}" class="btn btn-sm btn-outline-secondary">Voir</a>
-                <a href="{{ route('admin.tickets.edit',  $t->id) }}" class="btn btn-sm btn-outline-primary">Éditer</a>
+               
+                <a href="{{ route('admin.tickets.edit',  $t->id) }}" class="btn btn-sm btn-outline-primary">
+                  @lang('ticketAdmin.actions.edit')
+                </a>
                 <form action="{{ route('admin.tickets.destroy', $t->id) }}" method="POST" class="d-inline"
-                      onsubmit="return confirm('Supprimer ce ticket ?');">
+                      onsubmit="return confirm('@lang('ticketAdmin.delete_confirm')');">
                   @csrf
                   @method('DELETE')
-                  <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                  <button class="btn btn-sm btn-outline-danger">
+                    @lang('ticketAdmin.actions.delete')
+                  </button>
                 </form>
               </td>
             </tr>
           @empty
             <tr>
               <td colspan="6" class="empty">
-                Aucun ticket.
+                @lang('ticketAdmin.empty')
                 <div class="mt-2">
-                  <a href="{{ route('admin.tickets.create') }}" class="btn btn-primary btn-sm">Créer un ticket</a>
+                  <a href="{{ route('admin.tickets.create') }}" class="btn btn-primary btn-sm">
+                    @lang('ticketAdmin.empty_cta')
+                  </a>
                 </div>
               </td>
             </tr>
