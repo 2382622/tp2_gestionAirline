@@ -49,6 +49,8 @@ Route::get('/apropos', function () {
 
 
 Auth::routes();
+
+//route pour envoyer un email de vérification
 Auth::routes(['verify'=>true]);
 
 Route::get('/email/verify',function(){
@@ -67,6 +69,8 @@ Route::post('/email/verification-notification',function(Request $request){
     return back()->with('message','Verification link sent!');
 })->middleware(['auth','throttle:6.1'])->name('verification.send');
 
+
+//route pour envoyer un message test
 Route::get('/send-test-email', function () {
     Mail::to('sirine___@outlook.com')->send(new MyTestMail()); 
     return "Email sent!";
