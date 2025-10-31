@@ -63,14 +63,7 @@ class TicketController extends Controller
         return redirect()->route('tickets.index')->with('success', 'Ticket acheté avec succès');
     }
 
-    /**
-     * Afficher un ticket si c'est celui de l'utilisateur
-     */
-    public function show(int $id)
-    {
-        $ticket = Ticket::where('user_id', Auth::id())->with(['vol', 'user'])->findOrFail($id);
-        return view('tickets.show', compact('ticket'));
-    }
+
 
     /**
      * Formulaire d'édition, uniquement si c'est son ticket

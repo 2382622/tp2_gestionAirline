@@ -78,7 +78,7 @@
       {{-- Utilisateur --}}
       @isset($users)
         <div class="mb-4">
-          <label class="form-label">👤 @lang('tickets.user_optional')</label>
+          <label class="form-label">@lang('tickets.user_optional')</label>
           <select name="user_id" class="form-select">
             <option value="">— @lang('tickets.none') —</option>
             @foreach ($users as $u)

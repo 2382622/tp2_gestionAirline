@@ -57,6 +57,8 @@ return [
 'back'       => 'Retour',
 'columns.updated' => 'Mis à jour',
 
+
+
 ];
 
 
