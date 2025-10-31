@@ -36,6 +36,7 @@ return [
     'rechercher_vol' => 'Search for a flight...',
     'connexion' => 'Login',
     'inscription' => 'Register',
+    'deconnexion' => 'Logout',
 
     'accueil' => 'Home',
     'vols' => 'Flights',
