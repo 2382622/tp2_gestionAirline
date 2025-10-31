@@ -18,5 +18,9 @@ return [
     'throttled' => 'Patientez avant de réessayer.',
     'token' => 'Le jeton de connexion est invalide.',
     'user' => "Il n'y a aucun utilisateur avec ce mot de passe.",
-
+    'reset_password'=>"Réinitialiser le mot de passe",
+    'email_addr'=>'Adresse email',
+    'email_mssg'=>'Saisissez votre adresse e-mail pour recevoir un lien de réinitialisation de mot de passe.',
+    'send_pass'=>'Envoyer le lien de réinitialisation du mot de passe',
+    'back_login'=>'Retour à la connexion'
 ];

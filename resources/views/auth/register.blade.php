@@ -86,39 +86,39 @@
                 <label for="name" class="form-label">@lang('register.last_name')</label>
                 <input id="name" type="text"
                     class="form-control @error('name') is-invalid @enderror"
-                    name="name" value="{{ old('name') }}" required placeholder="ex: Tremblay">
-                @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    name="name" value="{{ old('name') }}" required placeholder="ex: Tremblay" autocomplete="name" autofocus>
+                @error('name') <div class="invalid-feedback"  role="alert">{{ $message }}</div> @enderror
             </div>
 
             <div class="mb-3">
                 <label for="prenom" class="form-label">@lang('register.first_name')</label>
                 <input id="prenom" type="text"
                     class="form-control @error('prenom') is-invalid @enderror"
-                    name="prenom" value="{{ old('prenom') }}" required placeholder="ex: Marie">
-                @error('prenom') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    name="prenom" value="{{ old('prenom') }}" required placeholder="ex: Marie"autocomplete="first-name" autofocus>
+                @error('prenom') <div class="invalid-feedback"  role="alert">{{ $message }}</div> @enderror
             </div>
 
             <div class="mb-3">
                 <label for="email" class="form-label">@lang('register.email_addr')</label>
                 <input id="email" type="email"
                     class="form-control @error('email') is-invalid @enderror"
-                    name="email" value="{{ old('email') }}" required placeholder="ex: marie.tremblay@email.com">
-                @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    name="email" value="{{ old('email') }}" required placeholder="ex: marie.tremblay@email.com" autocomplete="email">
+                @error('email') <div class="invalid-feedback" role="alert">{{ $message }}</div> @enderror
             </div>
 
             <div class="mb-3">
                 <label for="password" class="form-label">@lang('register.password')</label>
                 <input id="password" type="password"
                     class="form-control @error('password') is-invalid @enderror"
-                    name="password" required placeholder="••••••••">
-                @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    name="password" required placeholder="••••••••" autocomplete="new-password">
+                @error('password') <div class="invalid-feedback"  role="alert">{{ $message }}</div> @enderror
             </div>
 
             <div class="mb-4">
                 <label for="password-confirm" class="form-label">@lang('register.conf_password')</label>
                 <input id="password-confirm" type="password"
                     class="form-control"
-                    name="password_confirmation" required placeholder="••••••••">
+                    name="password_confirmation" required placeholder="••••••••" autocomplete="new-password">
             </div>
 
             <button type="submit" class="btn ga-btn w-100 py-2 text-white fw-semibold">

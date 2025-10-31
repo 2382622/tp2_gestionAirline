@@ -92,7 +92,7 @@
         </div>
 
         <div class="text-center ga-muted small mt-3">
-            © {{ date('Y') }} — Gestion Airline. Tous droits réservés.
+            © {{ date('Y') }} — @lang('general.rights')
         </div>
     </div>
 </div>

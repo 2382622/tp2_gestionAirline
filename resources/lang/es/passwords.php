@@ -18,5 +18,10 @@ return [
     'throttled' => 'Por favor, espere antes de volver a intentarlo.',
     'token' => 'Este token de restablecimiento de contraseña no es válido.',
     'user' => "No podemos encontrar ningún usuario con esa dirección de correo electrónico.",
+    'reset_password'=>"Restablecer contraseña",
+    'email_addr'=>'Correo electrónico',
+    'email_mssg'=>'Introduce tu correo electrónico para recibir un enlace de restablecimiento de contraseña.',
+    'send_pass'=>'Enviar enlace para restablecer contraseña',
+    'back_login'=>'Volver a iniciar sesión'
 
 ];

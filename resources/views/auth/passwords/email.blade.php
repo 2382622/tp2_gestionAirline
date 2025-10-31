@@ -76,9 +76,9 @@
 <div class="email-section">
     <div class="ga-card">
         <div class="text-center mb-4">
-            <h1 class="h4 fw-bold mb-1">{{ __('Reset Password') }}</h1>
+            <h1 class="h4 fw-bold mb-1"> @lang('passwords.reset_password') </h1>
             <div class="ga-muted small">
-                {{ __('Enter your email to receive a password reset link.') }}
+                @lang('passwords.email_mssg')
             </div>
         </div>
 
@@ -92,7 +92,7 @@
             @csrf
 
             <div class="mb-4">
-                <label for="email" class="form-label">{{ __('Email Address') }}</label>
+                <label for="email" class="form-label">@lang('passwords.email_addr')</label>
                 <input id="email" type="email"
                     class="form-control @error('email') is-invalid @enderror"
                     name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
@@ -101,18 +101,18 @@
             </div>
 
             <button type="submit" class="btn ga-btn w-100 py-2 fw-semibold">
-                {{ __('Send Password Reset Link') }}
+                @lang('passwords.send_pass')
             </button>
         </form>
 
         <div class="text-center ga-muted small mt-4">
             <a href="{{ route('login') }}" class="text-decoration-none link-primary">
-                {{ __('Back to login') }}
+                @lang('passwords.back_login')
             </a>
         </div>
 
         <div class="text-center ga-muted small mt-2">
-            © {{ date('Y') }} — Gestion Airline. Tous droits réservés.
+            © {{ date('Y') }} — @lang('general.rights')
         </div>
     </div>
 </div>
