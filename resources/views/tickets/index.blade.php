@@ -30,9 +30,7 @@
   .toolbar{ gap:.75rem }
   .search-input{ border-radius:.7rem }
   .pagination{ justify-content: center; }
-  .empty{
-    text-align:center; padding:3rem 1rem; color:#64748b;
-  }
+  .empty{ text-align:center; padding:3rem 1rem; color:#64748b; }
 </style>
 
 <div class="tickets-wrap">
@@ -48,18 +46,21 @@
 
     {{-- En-tête + outils --}}
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 toolbar">
-      <h1 class="h4 m-0 fw-bold">Tickets</h1>
+      <h1 class="h4 m-0 fw-bold">@lang('tickets.title_list')</h1>
 
       <div class="d-flex align-items-center toolbar">
-        <input id="q" type="search" class="form-control search-input" placeholder="Filtrer (vol, utilisateur)…"
+        <input id="q" type="search" class="form-control search-input"
+               placeholder="@lang('tickets.search_placeholder')"
                oninput="filterTable(this.value)">
-        <a href="{{ route('tickets.create') }}" class="btn btn-primary ms-md-2">Nouveau ticket</a>
+        <a href="{{ route('tickets.create') }}" class="btn btn-primary ms-md-2">
+          @lang('tickets.new_ticket')
+        </a>
       </div>
     </div>
 
     <div class="d-flex justify-content-between align-items-center text-muted mb-2">
-      <div>Total : <strong>{{ $tickets->total() }}</strong></div>
-      {{-- place pour futurs filtres (date, vol, etc.) --}}
+      <div>@lang('tickets.total') : <strong>{{ $tickets->total() }}</strong></div>
+      {{-- place pour futurs filtres --}}
     </div>
 
     {{-- Tableau --}}
@@ -67,12 +68,12 @@
       <table class="table align-middle" id="ticketsTable">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Vol</th>
-            <th>Utilisateur</th>
-            <th>Quantité</th>
-            <th>Créé</th>
-            <th class="text-end">Actions</th>
+            <th>@lang('tickets.columns.id')</th>
+            <th>@lang('tickets.columns.flight')</th>
+            <th>@lang('tickets.columns.user')</th>
+            <th>@lang('tickets.columns.quantity')</th>
+            <th>@lang('tickets.columns.created')</th>
+            <th class="text-end">@lang('tickets.columns.actions')</th>
           </tr>
         </thead>
         <tbody>
@@ -88,13 +89,14 @@
                     {{ trim($t->vol->origine) }} → {{ trim($t->vol->destination) }}
                   </div>
                   <div class="small text-muted">
-                    Départ : {{ \Carbon\Carbon::parse($t->vol->date_depart)->format('d/m/Y H:i') }}
+                    @lang('tickets.departure') :
+                    {{ \Carbon\Carbon::parse($t->vol->date_depart)->translatedFormat('d/m/Y H:i') }}
                     <span class="ms-2 badge-soft badge-vol">
                       {{ $t->vol->numero_vol ?? ('V-' . str_pad($t->vol->id,3,'0',STR_PAD_LEFT)) }}
                     </span>
                   </div>
                 @else
-                  <em class="text-muted">Vol supprimé</em>
+                  <em class="text-muted">@lang('tickets.flight_deleted')</em>
                 @endif
               </td>
 
@@ -111,26 +113,34 @@
               </td>
 
               <td class="text-nowrap">
-                {{ optional($t->created_at)->format('d/m/Y H:i') }}
+                {{ optional($t->created_at)->translatedFormat('d/m/Y H:i') }}
               </td>
 
               <td class="text-end">
-                <a href="{{ route('tickets.show', $t->id) }}" class="btn btn-sm btn-outline-secondary">Voir</a>
-                <a href="{{ route('tickets.edit', $t->id) }}" class="btn btn-sm btn-outline-warning">Éditer</a>
+                <a href="{{ route('tickets.show', $t->id) }}" class="btn btn-sm btn-outline-secondary">
+                  @lang('tickets.actions.view')
+                </a>
+                <a href="{{ route('tickets.edit', $t->id) }}" class="btn btn-sm btn-outline-warning">
+                  @lang('tickets.actions.edit')
+                </a>
                 <form action="{{ route('tickets.destroy', $t->id) }}" method="POST" class="d-inline"
-                      onsubmit="return confirm('Supprimer ce ticket ?');">
+                      onsubmit="return confirm('@lang('tickets.delete_confirm')');">
                   @csrf
                   @method('DELETE')
-                  <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                  <button class="btn btn-sm btn-outline-danger">
+                    @lang('tickets.actions.delete')
+                  </button>
                 </form>
               </td>
             </tr>
           @empty
             <tr>
               <td colspan="6" class="empty">
-                Aucun ticket pour le moment.
+                @lang('tickets.empty')
                 <div class="mt-2">
-                  <a href="{{ route('tickets.create') }}" class="btn btn-primary btn-sm">Créer un ticket</a>
+                  <a href="{{ route('tickets.create') }}" class="btn btn-primary btn-sm">
+                    @lang('tickets.empty_cta')
+                  </a>
                 </div>
               </td>
             </tr>
