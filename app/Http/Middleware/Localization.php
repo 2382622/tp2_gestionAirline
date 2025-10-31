@@ -19,6 +19,10 @@ class Localization
     {
         if (session()->has('locale')) {
             App::setLocale(session()->get('locale'));
+        } elseif ($request->hasCookie('locale')) {
+            $locale = $request->cookie('locale');
+            App::setLocale($locale);
+            session()->put('locale', $locale);
         }
         return $next($request);
     }

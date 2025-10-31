@@ -1,11 +1,14 @@
 <?php
 
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AvionController;
 use App\Http\Controllers\VolController;
 use App\Http\Controllers\AccueilController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AdminTicketController;
+    use Illuminate\Support\Facades\Mail;
+    use App\Mail\MyTestMail; // If you created a Mailable class
 
 /*
 |--------------------------------------------------------------------------
@@ -29,10 +32,6 @@ Route::resources([
     'vols' => VolController::class,
 ]);
 
-
-
-Auth::routes();
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
@@ -47,3 +46,35 @@ Route::middleware('auth')->group(function () {
 Route::get('/apropos', function () {
     return view('apropos');
 })->name('apropos');
+
+
+Auth::routes();
+
+//route pour envoyer un email de vérification
+Auth::routes(['verify'=>true]);
+
+Route::get('/email/verify',function(){
+    return view('auth.verify');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email.verify/{id}/{hash}',function(EmailVerificationRequest $request){
+    $request->fulfill();
+
+    return redirect('/home');
+})->middleware(['auth','signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification',function(Request $request){
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message','Verification link sent!');
+})->middleware(['auth','throttle:6.1'])->name('verification.send');
+
+
+//route pour envoyer un message test
+Route::get('/send-test-email', function () {
+    Mail::to('sirine___@outlook.com')->send(new MyTestMail()); 
+    return "Email sent!";
+});
+
+
+
