@@ -134,7 +134,7 @@
                 @if(auth()->user()->role === 'admin')
                     <div class="ga-action-group">
                         <a href="{{ route('avions.edit', $avion) }}" class="ga-btn ga-btn-primary">Modifier</a>
-                        <form action="{{ route('avions.destroy', $avion) }}" method="POST" class="ga-inline-form" onsubmit="return confirm('Supprimer cet avion ?');">
+                        <form action="{{ route('avions.destroy', $avion) }}" method="POST" class="ga-inline-form" onsubmit="return confirm('{{ __('general.avion_delete_confirm') }}');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="ga-btn ga-btn-danger">Supprimer</button>

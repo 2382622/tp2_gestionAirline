@@ -113,7 +113,7 @@
 
         @if($errors->any())
             <div class="ga-alert-warning">
-                Merci de corriger les champs en erreur.
+                {{ __('general.form_fix_errors') }}
             </div>
         @endif
 

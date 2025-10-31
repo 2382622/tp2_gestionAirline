@@ -49,6 +49,13 @@ return [
     'lang_en' => 'English',
     'lang_es' => 'Spanish',
 
+    'form_fields_required' => 'All fields are required.',
+    'form_fix_errors' => 'Please fix the highlighted fields.',
+    'avion_created' => 'Plane created successfully.',
+    'avion_updated' => 'Plane updated successfully.',
+    'avion_deleted' => 'Plane deleted successfully.',
+    'avion_delete_confirm' => 'Delete this plane?',
+
     'rights'=>'Gestion Airline. All rights reserved',
     'logged'=>'You are logged in!'
 
