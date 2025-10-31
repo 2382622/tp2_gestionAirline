@@ -49,4 +49,6 @@ return [
     'lang_en' => 'English',
     'lang_es' => 'Spanish',
 
+    'rights'=>'Gestion Airline. All rights reserved'
+
 ];

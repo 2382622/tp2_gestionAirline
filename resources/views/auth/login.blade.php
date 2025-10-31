@@ -74,7 +74,7 @@
                 <div class="ga-card p-4 p-sm-5">
                     <div class="text-center mb-4">
 
-                        <h1 class="h3 fw-bold mt-3 mb-1">Connexion à votre compte</h1>
+                        <h1 class="h3 fw-bold mt-3 mb-1">@lang('login.login') </h1>
                     </div>
 
                     <form method="POST" action="{{ route('login') }}" novalidate>
@@ -82,7 +82,7 @@
 
                         {{-- Email --}}
                         <div class="mb-3">
-                            <label for="email" class="form-label">Adresse courriel</label>
+                            <label for="email" class="form-label">@lang('login.email_addr')</label>
                             <input id="email" type="email"
                                 class="form-control ga-form-control @error('email') is-invalid @enderror"
                                 name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
@@ -95,10 +95,10 @@
                         {{-- Password + lien oublié --}}
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <label for="password" class="form-label mb-0">Mot de passe</label>
+                                <label for="password" class="form-label mb-0">@lang('login.password')</label>
                                 @if (Route::has('password.request'))
                                 <a class="link-primary small" href="{{ route('password.request') }}">
-                                    Mot de passe oublié ?
+                                    @lang('login.forgot_password')
                                 </a>
                                 @endif
                             </div>
@@ -114,18 +114,18 @@
                         <div class="form-check mb-4">
                             <input class="form-check-input" type="checkbox" name="remember" id="remember"
                                 {{ old('remember') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="remember">Se souvenir de moi</label>
+                            <label class="form-check-label" for="remember">@lang('login.remember_me')</label>
                         </div>
 
                         {{-- Submit --}}
                         <button type="submit" class="btn ga-btn w-100 py-2 text-white fw-semibold">
-                            Se connecter
+                            @lang('login.log_in')
                         </button>
                     </form>
 
                     {{-- Footer --}}
                     <div class="text-center ga-muted small mt-4">
-                        © {{ date('Y') }} — Gestion Airline. Tous droits réservés.
+                        © {{ date('Y') }} — @lang('general.rights')
                     </div>
                 </div>
             </div>
