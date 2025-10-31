@@ -49,14 +49,14 @@ class AvionController extends Controller
 
         if ($validator->fails()) {
             return redirect()->back()
-                ->with('warning', 'Tous les champs sont requis')
+                ->with('warning', __('general.form_fields_required'))
                 ->withErrors($validator)
                 ->withInput();
         }
 
         Avion::create($validator->validated());
 
-        return redirect()->route('avions.index')->with('success', 'Avion ajoute avec succes');
+        return redirect()->route('avions.index')->with('success', __('general.avion_created'));
     }
 
     /**
@@ -101,14 +101,14 @@ class AvionController extends Controller
 
         if ($validator->fails()) {
             return redirect()->back()
-                ->with('warning', 'Tous les champs sont requis')
+                ->with('warning', __('general.form_fields_required'))
                 ->withErrors($validator)
                 ->withInput();
         }
 
         $avion->update($validator->validated());
 
-        return redirect()->route('avions.index')->with('success', 'Avion modifie avec succes');
+        return redirect()->route('avions.index')->with('success', __('general.avion_updated'));
     }
 
     /**
@@ -122,6 +122,6 @@ class AvionController extends Controller
         $avion = Avion::findOrFail($id);
         $avion->delete();
 
-        return redirect()->route('avions.index')->with('success', 'Avion supprime avec succes');
+        return redirect()->route('avions.index')->with('success', __('general.avion_deleted'));
     }
 }
