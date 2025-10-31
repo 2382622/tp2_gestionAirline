@@ -2,21 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Avion;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\User;
 
 class AvionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'admin'])->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response 
+     * @return \Illuminate\Contracts\View\View
      */
     public function index()
     {
-
         $avions = Avion::latest()->paginate(10);
         return view('avions.index', compact('avions'));
     }
@@ -24,7 +27,7 @@ class AvionController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function create()
     {
@@ -35,35 +38,32 @@ class AvionController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        // Validation des champs
         $validator = Validator::make($request->all(), [
             'modele' => 'required|string|max:255',
             'capacite' => 'required|integer|min:1',
         ]);
 
-        // Si échec de validation
         if ($validator->fails()) {
             return redirect()->back()
                 ->with('warning', 'Tous les champs sont requis')
-                ->withErrors($validator);
+                ->withErrors($validator)
+                ->withInput();
         }
 
-        // Création 
-        Avion::create($request->all());
+        Avion::create($validator->validated());
 
-        // Redirection avec message de succès
-        return redirect()->route('avions.index')->with('success', 'Avion ajouté avec succès');
+        return redirect()->route('avions.index')->with('success', 'Avion ajoute avec succes');
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function show($id)
     {
@@ -75,7 +75,7 @@ class AvionController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function edit($id)
     {
@@ -88,7 +88,7 @@ class AvionController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
@@ -102,28 +102,26 @@ class AvionController extends Controller
         if ($validator->fails()) {
             return redirect()->back()
                 ->with('warning', 'Tous les champs sont requis')
-                ->withErrors($validator);
-
-
+                ->withErrors($validator)
+                ->withInput();
         }
 
-        $avion->update($request->all());
-        return redirect()->route('avions.index')->with('success', 'Avion modifié avec succès');
+        $avion->update($validator->validated());
+
+        return redirect()->route('avions.index')->with('success', 'Avion modifie avec succes');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
         $avion = Avion::findOrFail($id);
         $avion->delete();
 
-        return redirect()->route('avions.index')->with('success', 'Avion supprimé avec succès');
+        return redirect()->route('avions.index')->with('success', 'Avion supprime avec succes');
     }
-
-
 }
