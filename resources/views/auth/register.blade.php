@@ -76,14 +76,14 @@
 <div class="auth-section">
     <div class="ga-card">
         <div class="text-center mb-4">
-            <h1 class="h3 fw-bold mt-2 mb-1">Créer un compte</h1>
+            <h1 class="h3 fw-bold mt-2 mb-1">@lang('register.create_account')</h1>
         </div>
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
             <div class="mb-3">
-                <label for="name" class="form-label">Nom</label>
+                <label for="name" class="form-label">@lang('register.last_name')</label>
                 <input id="name" type="text"
                     class="form-control @error('name') is-invalid @enderror"
                     name="name" value="{{ old('name') }}" required placeholder="ex: Tremblay">
@@ -91,7 +91,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="prenom" class="form-label">Prénom</label>
+                <label for="prenom" class="form-label">@lang('register.first_name')</label>
                 <input id="prenom" type="text"
                     class="form-control @error('prenom') is-invalid @enderror"
                     name="prenom" value="{{ old('prenom') }}" required placeholder="ex: Marie">
@@ -99,7 +99,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="email" class="form-label">Adresse courriel</label>
+                <label for="email" class="form-label">@lang('register.email_addr')</label>
                 <input id="email" type="email"
                     class="form-control @error('email') is-invalid @enderror"
                     name="email" value="{{ old('email') }}" required placeholder="ex: marie.tremblay@email.com">
@@ -107,7 +107,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="password" class="form-label">Mot de passe</label>
+                <label for="password" class="form-label">@lang('register.password')</label>
                 <input id="password" type="password"
                     class="form-control @error('password') is-invalid @enderror"
                     name="password" required placeholder="••••••••">
@@ -115,24 +115,24 @@
             </div>
 
             <div class="mb-4">
-                <label for="password-confirm" class="form-label">Confirmer le mot de passe</label>
+                <label for="password-confirm" class="form-label">@lang('register.conf_password')</label>
                 <input id="password-confirm" type="password"
                     class="form-control"
                     name="password_confirmation" required placeholder="••••••••">
             </div>
 
             <button type="submit" class="btn ga-btn w-100 py-2 text-white fw-semibold">
-                Créer mon compte
+                @lang('register.register')
             </button>
         </form>
 
         <div class="text-center ga-muted small mt-4">
-            Vous avez déjà un compte ?
-            <a href="{{ route('login') }}" class="link-primary text-decoration-none">Se connecter</a>
+            @lang('register.existing_acc')
+            <a href="{{ route('login') }}" class="link-primary text-decoration-none">@lang('register.login')</a>
         </div>
 
         <div class="text-center ga-muted small mt-2">
-            © {{ date('Y') }} — Gestion Airline. Tous droits réservés.
+            © {{ date('Y') }} — @lang( 'general.rights')
         </div>
     </div>
 </div>
