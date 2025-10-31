@@ -66,10 +66,9 @@ class VolController extends Controller
         // 2) Upload de la photo 
         $fileName = null;
         if ($request->file('photo') && $request->file('photo')->isValid()) {
-            $image    = $request->file('photo');
-            $fileName = time().'.'.$image->getClientOriginalExtension();
-            // => storage/app/public/images/upload/<fileName>
-            $image->storeAs('images/upload', $fileName, 'public');
+            $image = $request->file('photo');
+            $storedPath = $image->store('images/upload', 'public');
+            $fileName = basename($storedPath);
         }
 
         // 3) Création du vol
@@ -163,10 +162,9 @@ class VolController extends Controller
                 Storage::disk('public')->delete('images/upload/'.$vol->photo);
             }
 
-            $image    = $request->file('photo');
-            $fileName = time().'.'.$image->getClientOriginalExtension();
-            $image->storeAs('images/upload', $fileName, 'public');
-            $vol->photo = $fileName;
+            $image = $request->file('photo');
+            $storedPath = $image->store('images/upload', 'public');
+            $vol->photo = basename($storedPath);
         }
 
         // 5) Sauvegarde
