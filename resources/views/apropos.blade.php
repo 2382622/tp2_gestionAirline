@@ -1,31 +1,154 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <h1 class="mb-4 text-center">À propos de l’application</h1>
+    <style>
+        /* ====== FOND ET STRUCTURE ====== */
+        body {
+            background:
+                radial-gradient(1200px 600px at -10% -10%, #dbeafe 0%, transparent 60%),
+                radial-gradient(1000px 600px at 110% 10%, #ede9fe 0%, transparent 60%),
+                linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            font-family: 'Nunito', sans-serif;
+        }
 
-        <div class="card shadow-sm">
+        .apropos-container {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            padding: 2rem;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.7s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ====== TITRE PRINCIPAL ====== */
+        .apropos-title {
+            text-align: center;
+            font-weight: 800;
+            color: #1e293b;
+            font-size: clamp(28px, 3vw, 36px);
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 4px rgba(99, 102, 241, 0.15);
+            position: relative;
+        }
+
+        .apropos-title::after {
+            content: "";
+            display: block;
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            margin: 12px auto 0;
+            border-radius: 2px;
+        }
+
+        /* ====== CARTES ====== */
+        .apropos-card {
+            border: none;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .apropos-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+        }
+
+        .apropos-card h4 {
+            color: #4f46e5;
+            font-weight: 700;
+            border-left: 5px solid #8b5cf6;
+            padding-left: 10px;
+        }
+
+        /* ====== LISTES ET PARAGRAPHES ====== */
+        .apropos-card p,
+        .apropos-card li {
+            color: #334155;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        ul,
+        ol {
+            margin-top: 1rem;
+            margin-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* ====== LIENS ====== */
+        a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 768px) {
+            .apropos-container {
+                padding: 1.5rem;
+            }
+
+            .apropos-title {
+                font-size: 1.8rem;
+            }
+
+            .apropos-card h4 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+
+    <div class="container apropos-container">
+        {{-- ===== TITRE DE LA PAGE ===== --}}
+        <h1 class="apropos-title">À propos de l’application</h1>
+
+        {{-- ===== SECTION INFORMATIONS GÉNÉRALES ===== --}}
+        <div class="card apropos-card mb-4">
             <div class="card-body">
-                <h4 class="mb-3">Informations générales</h4>
+                <h4>Informations générales</h4>
                 <p><strong>Noms :</strong> Kouanda Yuan Dietrich, Magra Sirine, Granger Samuel</p>
                 <p><strong>Titre du cours :</strong> 420-5H6-MO – Applications Web transactionnelles</p>
-                <p><strong>Session :</strong> Automne 2023</p>
+                <p><strong>Session :</strong> Automne 2025</p>
                 <p><strong>Établissement :</strong> Collège Montmorency</p>
             </div>
         </div>
 
-        <div class="card shadow-sm mt-4">
+        {{-- ===== DESCRIPTION ===== --}}
+        <div class="card apropos-card mb-4">
             <div class="card-body">
-                <h4 class="mb-3">Description de l’application</h4>
+                <h4>Description de l’application</h4>
                 <p>
-                    Cette application web permet de gérer les vols et les avions d’une
-                    compagnie aérienne.
+                    Cette application web permet de gérer les vols et les avions d’une compagnie aérienne.
                     Elle a été réalisée dans le cadre du cours <em>Applications Web transactionnelles</em> afin de démontrer
                     la création d’un site Laravel complet avec gestion de base de données, rôles utilisateurs et
-                    multilinguisme.
+                    interface multilingue.
                 </p>
 
-                <p>L’application inclut les principales fonctionnalités suivantes :</p>
+                <p><strong>Fonctionnalités principales :</strong></p>
                 <ul>
                     <li>Affichage, recherche et gestion des vols.</li>
                     <li>Création, modification et suppression d’avions.</li>
@@ -36,77 +159,55 @@
             </div>
         </div>
 
-        <div class="card shadow-sm mt-4">
+        {{-- ===== ÉTAPES DE VÉRIFICATION ===== --}}
+        <div class="card apropos-card mb-4">
             <div class="card-body">
-                <h4 class="mb-3">Étapes pour vérifier le fonctionnement</h4>
-
+                <h4>Étapes pour vérifier le fonctionnement</h4>
                 <ol>
                     <li>
                         <strong>Accéder à l’accueil :</strong>
-                        Rendez-vous sur la page d’accueil à partir du menu principal.
-                        Vous verrez la liste de tous les vols enregistrés dans la base de données.
+                        Depuis le menu principal, ouvrez la page d’accueil pour voir la liste de tous les vols.
                     </li>
-
                     <li>
                         <strong>Utiliser la barre de recherche :</strong>
-                        Tapez une destination (ex : “Paris”) dans la barre de recherche.
-                        → Des suggestions apparaîtront automatiquement grâce à l’autocomplétion.
-                        → Sélectionnez un vol pour consulter sa page de détails.
+                        Tapez une destination (ex. « Paris ») dans la barre de recherche pour voir l’autocomplétion.
                     </li>
-
                     <li>
                         <strong>Consulter les détails d’un vol :</strong>
-                        Cliquez sur le bouton « Voir » pour afficher les informations d’un vol :
-                        <em>origine, destination, dates, prix et avion associé.</em>
+                        Cliquez sur le bouton <em>Voir</em> pour afficher les informations détaillées du vol sélectionné.
                     </li>
-
                     <li>
-                        <strong>Se connecter comme administrateur :</strong>
-                        Utilisez les identifiants suivants :
+                        <strong>Connexion admin :</strong>
                         <ul>
                             <li><strong>Email :</strong> admin@airline.com</li>
                             <li><strong>Mot de passe :</strong> admin123</li>
                         </ul>
-                        Une fois connecté, vous aurez accès à de nouvelles options :
-                        <ul>
-                            <li>Créer un vol</li>
-                            <li>Modifier un vol</li>
-                            <li>Supprimer un vol</li>
-                        </ul>
+                        Cela permet d’accéder aux options de création, modification et suppression de vols.
                     </li>
-
                     <li>
                         <strong>Créer un vol :</strong>
-                        Cliquez sur « Créer un vol » et remplissez le formulaire avec :
-                        <ul>
-                            <li>L’origine et la destination</li>
-                            <li>Les dates de départ et d’arrivée</li>
-                            <li>Le prix du billet</li>
-                            <li>L’avion choisi</li>
-                        </ul>
-                        Cliquez sur <strong>Enregistrer</strong> pour l’ajouter à la liste.
+                        Cliquez sur <em>Créer un vol</em> et remplissez les champs requis, puis enregistrez.
                     </li>
-
                     <li>
                         <strong>Changer la langue :</strong>
-                        Utilisez le menu déroulant du haut pour sélectionner :
+                        Utilisez le menu déroulant du haut pour choisir la langue du site :
                         <ul>
-                            <li>Français FR</li>
-                            <li>Anglais EN</li>
-                            <li>Espagnol ES</li>
+                            <li>Français (FR)</li>
+                            <li>Anglais (EN)</li>
+                            <li>Espagnol (ES)</li>
                         </ul>
-                        Le contenu du site s’adapte automatiquement à la langue choisie.
                     </li>
                 </ol>
             </div>
         </div>
 
-        <div class="card shadow-sm mt-4">
+        {{-- ===== REMARQUES ===== --}}
+        <div class="card apropos-card mb-4">
             <div class="card-body">
-                <h4 class="mb-3">Remarques</h4>
+                <h4>Remarques</h4>
                 <ul>
                     <li>Si la recherche ne donne aucun résultat, le message « Aucun vol trouvé » s’affiche.</li>
-                    <li>Les utilisateurs non connectés peuvent consulter uniquement les vols.</li>
+                    <li>Les utilisateurs non connectés peuvent uniquement consulter les vols.</li>
                     <li>Les boutons « Modifier » et « Supprimer » sont réservés aux administrateurs.</li>
                 </ul>
             </div>
