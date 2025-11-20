@@ -28,7 +28,7 @@ class UserController extends Controller
 
         $user = User::create([
             'name' => $data['name'],
-            'prenom' => 'required|string|max:255',
+            'prenom' => $data['prenom'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
