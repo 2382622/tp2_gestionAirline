@@ -7,16 +7,13 @@
 
     <title>Gestion Airline</title>
 
-    {{-- CSRF token pour sécuriser les requêtes AJAX --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- Importation des polices et styles externes --}}
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
 
     <style>
-        /* ====== FOND GLOBAL ====== */
         html,
         body {
             height: 100%;
@@ -30,7 +27,6 @@
             flex-direction: column;
         }
 
-        /* ====== STRUCTURE PRINCIPALE ====== */
         #app {
             display: flex;
             flex-direction: column;
@@ -39,20 +35,18 @@
 
         main {
             flex: 1;
-            /* pousse le footer vers le bas */
         }
 
-        /* ====== NAVBAR ====== */
         .navbar {
-            background: white;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            background: #fff;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, .05);
             font-weight: 600;
         }
 
         .navbar-brand {
             color: #4f46e5 !important;
             font-weight: 700;
-            transition: color 0.2s ease;
+            transition: color .2s;
         }
 
         .navbar-brand:hover {
@@ -61,72 +55,98 @@
 
         .nav-link {
             color: #334155 !important;
-            transition: color 0.2s ease;
+            transition: color .2s;
         }
 
         .nav-link:hover {
             color: #6366f1 !important;
         }
 
-        /* ====== FOOTER FIXE ====== */
+        /* Drapeaux */
+        .flag {
+            width: 22px;
+            height: 22px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, .08);
+        }
+
+        .flag-sm {
+            width: 18px;
+            height: 18px;
+        }
+
+        .flag-inline {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        /* Bouton langue */
+        .btn-lang {
+            border-color: #cbd5e1;
+            color: #334155;
+            background: #fff;
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .btn-lang:hover {
+            background: #6366f1;
+            color: #fff;
+        }
+
+        .dropdown-item .flag {
+            margin-right: .5rem;
+        }
+
         footer {
             background: linear-gradient(90deg, #4f46e5, #8b5cf6);
-            color: white;
+            color: #fff;
             text-align: center;
             padding: 1rem 0;
-            font-size: 0.95rem;
-            box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.05);
-            position: relative;
-            /* empêche le chevauchement */
+            font-size: .95rem;
+            box-shadow: 0 -3px 10px rgba(0, 0, 0, .05);
             width: 100%;
         }
 
         footer a {
             color: #c7d2fe;
             text-decoration: none;
-            transition: color 0.2s ease;
         }
 
         footer a:hover {
-            color: white;
+            color: #fff;
             text-decoration: underline;
         }
 
-        /* ====== BOUTON LANGUE ====== */
-        .btn-outline-secondary {
-            border-color: #cbd5e1;
-            color: #334155;
-        }
-
-        .btn-outline-secondary:hover {
-            background-color: #6366f1;
-            color: white;
-        }
-
-        /* ====== RESPONSIVE ====== */
-        @media (max-width: 768px) {
-            .navbar-brand {
-                font-size: 1rem;
-            }
+        .footer-flags a {
+            display: inline-flex;
+            align-items: center;
+            margin: 0 .35rem;
         }
     </style>
 </head>
 
 <body>
     <div id="app">
-        {{-- ====== BARRE DE NAVIGATION ====== --}}
+        {{-- Détermine le drapeau courant --}}
+        @php
+            $flagMap = ['fr' => 'drapeau_fr', 'en' => 'drapeau_en', 'es' => 'drapeau_es'];
+            $locale = app()->getLocale();
+            $flagCurrent = $flagMap[$locale] ?? 'drapeau_en';
+            $ext = 'png'; // <-- change en 'svg' si tes fichiers sont en .svg
+        @endphp
+
         <nav class="navbar navbar-expand-md navbar-light shadow-sm">
             <div class="container">
-                {{-- Liens principaux --}}
                 <a class="navbar-brand" href="{{ route('accueil') }}">@lang('general.accueil')</a>
                 <a class="navbar-brand" href="{{ route('vols.index') }}">@lang('general.vols')</a>
 
-                {{-- Tickets visibles seulement si connecté --}}
                 @auth
                     <a class="navbar-brand" href="{{ route('tickets.index') }}">@lang('general.tickets')</a>
                 @endauth
-
-                {{-- Liens admin --}}
                 @auth
                     @if(auth()->user()->role === 'admin')
                         <a class="navbar-brand" href="{{ route('avions.index') }}">@lang('general.avions')</a>
@@ -134,16 +154,14 @@
                     @endif
                 @endauth
 
-                {{-- Bouton burger mobile --}}
                 <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
                     aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                {{-- Menu droit : Auth + Langue --}}
                 <div class="collapse navbar-collapse justify-content-end" id="mainNav">
                     <ul class="navbar-nav ms-auto align-items-center">
-                        {{-- Si connecté --}}
+
                         @auth
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
@@ -161,7 +179,6 @@
                             </li>
                         @endauth
 
-                        {{-- Si invité --}}
                         @guest
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">@lang('general.connexion')</a>
@@ -171,52 +188,69 @@
                             </li>
                         @endguest
 
-                        {{-- Sélecteur de langue --}}
+                        {{-- Sélecteur de langue en drapeaux --}}
                         <li class="nav-item dropdown ms-2">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            <button class="btn btn-outline-secondary btn-lang dropdown-toggle" type="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                @lang('general.langue') ({{ strtoupper(app()->getLocale()) }})
+                                <img class="flag" src="{{ asset('images/' . $flagCurrent . '.' . $ext) }}" alt="lang">
+                                <span>{{ strtoupper($locale) }}</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{{ url('lang/fr') }}">@lang('general.lang_fr')</a>
+                                <li>
+                                    <a class="dropdown-item flag-inline" href="{{ url('lang/fr') }}"
+                                        aria-label="Français">
+                                        <img class="flag" src="{{ asset('images/drapeau_fr.' . $ext) }}" alt="FR">
+                                        <span>Français</span>
+                                    </a>
                                 </li>
-                                <li><a class="dropdown-item" href="{{ url('lang/en') }}">@lang('general.lang_en')</a>
+                                <li>
+                                    <a class="dropdown-item flag-inline" href="{{ url('lang/en') }}"
+                                        aria-label="English">
+                                        <img class="flag" src="{{ asset('images/drapeau_en.' . $ext) }}" alt="EN">
+                                        <span>English</span>
+                                    </a>
                                 </li>
-                                <li><a class="dropdown-item" href="{{ url('lang/es') }}">@lang('general.lang_es')</a>
+                                <li>
+                                    <a class="dropdown-item flag-inline" href="{{ url('lang/es') }}"
+                                        aria-label="Español">
+                                        <img class="flag" src="{{ asset('images/drapeau_es.' . $ext) }}" alt="ES">
+                                        <span>Español</span>
+                                    </a>
                                 </li>
                             </ul>
-
                         </li>
+
                     </ul>
                 </div>
             </div>
         </nav>
 
-        {{-- ====== CONTENU PRINCIPAL ====== --}}
         <main class="py-4 container">
             @yield('content')
         </main>
 
-        {{-- ====== FOOTER FIXE EN BAS ====== --}}
         <footer>
             <div>
                 © {{ date('Y') }} — Gestion Airline |
                 <a href="{{ url('/apropos') }}">@lang('general.a_propos')</a>
             </div>
-            <div class="small text-light mt-1">
-                @lang('general.langue'):
-                <a href="{{ url('lang/fr') }}">FR</a> ·
-                <a href="{{ url('lang/en') }}">EN</a> ·
-                <a href="{{ url('lang/es') }}">ES</a>
+            <div class="mt-2 footer-flags">
+                <a href="{{ url('lang/fr') }}" title="Français">
+                    <img class="flag flag-sm" src="{{ asset('images/drapeau_fr.' . $ext) }}" alt="FR">
+                </a>
+                <a href="{{ url('lang/en') }}" title="English">
+                    <img class="flag flag-sm" src="{{ asset('images/drapeau_en.' . $ext) }}" alt="EN">
+                </a>
+                <a href="{{ url('lang/es') }}" title="Español">
+                    <img class="flag flag-sm" src="{{ asset('images/drapeau_es.' . $ext) }}" alt="ES">
+                </a>
             </div>
         </footer>
     </div>
 
-    {{-- Scripts JS --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-
     @stack('scripts')
 </body>
 

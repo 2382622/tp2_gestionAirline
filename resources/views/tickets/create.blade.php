@@ -40,7 +40,7 @@
     color: #334155;
   }
 
-  .ticket-card .form-select, 
+  .ticket-card .form-select,
   .ticket-card .form-control {
     border-radius: 0.75rem;
     transition: all 0.2s ease;
@@ -75,7 +75,7 @@
 
 <div class="ticket-container">
   <div class="ticket-card">
-    <h1>Nouveau ticket</h1>
+    <h1>@lang('tickets.title_new')</h1>
 
     @if($errors->any())
       <div class="alert alert-danger">
@@ -87,34 +87,46 @@
       </div>
     @endif
 
-    <form action="{{ route('tickets.store') }}" method="POST">
+    <form action="{{ route('tickets.store') }}" method="POST" novalidate>
       @csrf
 
       {{-- Sélection du vol --}}
       <div class="mb-4">
-        <label class="form-label">Vol</label>
-        <select name="vol_id" class="form-select" required>
-          <option value="">— Sélectionnez un vol —</option>
+        <label class="form-label" for="vol_id">@lang('tickets.select_flight')</label>
+        <select id="vol_id" name="vol_id" class="form-select @error('vol_id') is-invalid @enderror" required>
+          <option value="">{{ __('tickets.select_placeholder') }}</option>
           @foreach($vols as $v)
             <option value="{{ $v->id }}" @selected(old('vol_id') == $v->id)>
               {{ $v->origine }} → {{ $v->destination }}
-              — Départ : {{ \Carbon\Carbon::parse($v->date_depart)->format('d/m/Y H:i') }}
-              — Numéro de vol : {{ $v->numero_vol ?? 'V-' . str_pad($v->id, 3, '0', STR_PAD_LEFT) }}
+              — @lang('tickets.departure') : {{ \Carbon\Carbon::parse($v->date_depart)->translatedFormat('d/m/Y H:i') }}
+              — @lang('tickets.flight_number') : {{ $v->numero_vol ?? 'V-' . str_pad($v->id, 3, '0', STR_PAD_LEFT) }}
             </option>
           @endforeach
         </select>
+        @error('vol_id')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
       </div>
 
       {{-- Quantité --}}
       <div class="mb-4">
-        <label class="form-label">Quantité</label>
-        <input type="number" name="quantite" class="form-control" min="1" value="{{ old('quantite', 1) }}" required>
+        <label class="form-label" for="quantite">@lang('tickets.quantity')</label>
+        <input id="quantite" type="number" name="quantite"
+               class="form-control @error('quantite') is-invalid @enderror"
+               min="1" value="{{ old('quantite', 1) }}" required>
+        @error('quantite')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
       </div>
 
       {{-- Actions --}}
       <div class="d-flex gap-3">
-        <button type="submit" class="btn btn-primary flex-fill py-2 fw-semibold">Créer</button>
-        <a href="{{ route('tickets.index') }}" class="btn btn-secondary flex-fill py-2">Annuler</a>
+        <button type="submit" class="btn btn-primary flex-fill py-2 fw-semibold">
+          @lang('tickets.create')
+        </button>
+        <a href="{{ route('tickets.index') }}" class="btn btn-secondary flex-fill py-2">
+          @lang('tickets.cancel')
+        </a>
       </div>
     </form>
   </div>

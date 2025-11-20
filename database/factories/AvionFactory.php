@@ -14,7 +14,8 @@ class AvionFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'modele' => $this->faker->unique()->lexify('Modele ???'),
+            'capacite' => $this->faker->numberBetween(50, 400),
         ];
     }
 }
