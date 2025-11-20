@@ -11,23 +11,16 @@ class TicketController extends Controller
     // GET /api/tickets
     public function index()
     {
-
-        $tickets = Ticket::with('user')->get();
-
-        return response()->json($tickets);
+        return response()->json(Ticket::all());
     }
 
     // POST /api/tickets
     public function store(Request $request)
     {
-        // Validation des données reçues en JSON
         $data = $request->validate([
-            'titre' => 'required|string|max:255',
-            'description' => 'required|string',
-            'statut' => 'required|string|max:50',
-            'priorite' => 'nullable|string|max:50',
-            'user_id' => 'nullable|exists:users,id',
-            'vol_id' => 'nullable|exists:vols,id',
+            'vol_id' => 'required|exists:vols,id',
+            'user_id' => 'required|exists:users,id',
+            'quantite' => 'required|integer|min:1',
         ]);
 
         $ticket = Ticket::create($data);
@@ -38,8 +31,7 @@ class TicketController extends Controller
     // GET /api/tickets/{id}
     public function show(int $id)
     {
-        $ticket = Ticket::with('user')->findOrFail($id);
-
+        $ticket = Ticket::findOrFail($id);
         return response()->json($ticket);
     }
 
@@ -49,12 +41,9 @@ class TicketController extends Controller
         $ticket = Ticket::findOrFail($id);
 
         $data = $request->validate([
-            'titre' => 'sometimes|required|string|max:255',
-            'description' => 'sometimes|required|string',
-            'statut' => 'sometimes|required|string|max:50',
-            'priorite' => 'sometimes|nullable|string|max:50',
-            'user_id' => 'sometimes|nullable|exists:users,id',
-            'vol_id' => 'sometimes|nullable|exists:vols,id',
+            'vol_id' => 'sometimes|required|exists:vols,id',
+            'user_id' => 'sometimes|required|exists:users,id',
+            'quantite' => 'sometimes|required|integer|min:1',
         ]);
 
         $ticket->update($data);
