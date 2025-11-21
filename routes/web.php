@@ -21,6 +21,11 @@ use App\Http\Controllers\AdminTicketController;
 |
 */
 
+Route::get('/{any}', function () {
+    return view('monopage');
+})->where('any', '.*');
+
+
 // redirige vers les avions ou vols 
 Route::get('/', [AccueilController::class, 'index'])->name('accueil');
 Route::post('/autocomplete/vols', [VolController::class, 'autocomplete'])->name('vols.autocomplete');
