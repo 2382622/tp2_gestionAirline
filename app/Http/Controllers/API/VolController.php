@@ -70,4 +70,21 @@ class VolController extends Controller
 
         return response()->json(null, 204);
     }
+
+    // GET /api/vols-home
+    public function homeRandom()
+    {
+        $vols = Vol::with('avion')
+            ->where(function ($query) {
+                $query->where('origine', 'LIKE', '%Montréal%')
+                    ->orWhere('origine', 'LIKE', '%Montreal%')
+                    ->orWhere('destination', 'LIKE', '%Montréal%')
+                    ->orWhere('destination', 'LIKE', '%Montreal%');
+            })
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+
+        return response()->json($vols);
+    }
 }
