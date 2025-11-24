@@ -151,6 +151,10 @@ export default {
     },
     methods: {
         async fetchAvions() {
+            const token = localStorage.getItem('token')
+            if (token) {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+            }
             try {
                 const response = await axios.get('/api/avions')
                 this.avions = response.data
@@ -160,6 +164,11 @@ export default {
             }
         },
         async submit() {
+            const token = localStorage.getItem('token')
+            if (token) {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+            }
+
             this.loading = true
             this.error = null
             this.success = false

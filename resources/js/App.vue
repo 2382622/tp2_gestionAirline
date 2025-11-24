@@ -28,9 +28,6 @@
                             <RouterLink class="nav-link" to="/tickets">Mes billets</RouterLink>
                         </li>
                         <li class="nav-item" v-if="isAdmin">
-                            <RouterLink class="nav-link" to="/vols/create">Ajouter un vol</RouterLink>
-                        </li>
-                        <li class="nav-item" v-if="isAdmin">
                             <a class="nav-link" href="/avions">Liste Avions</a>
                         </li>
                     </ul>

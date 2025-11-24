@@ -27,7 +27,7 @@
                                 Voir tous les vols
                             </RouterLink>
                         </li>
-                        <li class="mb-2">
+                        <li class="mb-2" v-if="isAdmin">
                             <RouterLink class="btn btn-outline-success w-100" to="/vols/create">
                                 Ajouter un vol
                             </RouterLink>
@@ -58,6 +58,9 @@ export default {
             return this.user.prenom
                 ? `${this.user.prenom} ${this.user.name}`
                 : this.user.name
+        },
+        isAdmin() {
+            return this.user && this.user.role === 'admin'
         },
     },
     created() {
