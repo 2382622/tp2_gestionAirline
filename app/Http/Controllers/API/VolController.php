@@ -12,7 +12,21 @@ class VolController extends Controller
     // GET /api/vols
     public function index()
     {
-        return response()->json(Vol::with('avion')->get());
+        $user = request()->user();
+
+        $query = Vol::with('avion');
+
+        if ($user) {
+            $query->withCount([
+                'tickets as has_ticket' => function ($q) use ($user) {
+                    $q->where('user_id', $user->id);
+                },
+            ]);
+        }
+
+        $vols = $query->get();
+
+        return response()->json($vols);
     }
 
     // POST /api/vols

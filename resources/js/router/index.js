@@ -15,8 +15,13 @@ const routes = [
     { path: '/login', name: 'login', component: Login, meta: { guest: true } },
     { path: '/register', name: 'register', component: Register, meta: { guest: true } },
     { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresAuth: true } },
-    { path: '/vols', name: 'vols.index', component: ListVols, meta: { requiresAuth: true } },
-    { path: '/vols/create', name: 'vols.create', component: AddVol, meta: { requiresAuth: true } },
+    { path: '/vols', name: 'vols.index', component: ListVols },
+    {
+        path: '/vols/create',
+        name: 'vols.create',
+        component: AddVol,
+        meta: { requiresAuth: true, requiresAdmin: true },
+    },
     { path: '/tickets', name: 'tickets.index', component: MyTickets, meta: { requiresAuth: true } },
 ]
 
@@ -27,14 +32,30 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('token')
+    const rawUser = localStorage.getItem('user')
+    let user = null
+
+    if (rawUser) {
+        try {
+            user = JSON.parse(rawUser)
+        } catch (e) {
+            user = null
+        }
+    }
 
     if (to.meta.requiresAuth && !token) {
-        next({ name: 'login' })
-    } else if (to.meta.guest && token) {
-        next({ name: 'dashboard' })
-    } else {
-        next()
+        return next({ name: 'login' })
     }
+
+    if (to.meta.requiresAdmin && (!user || user.role !== 'admin')) {
+        return next({ name: 'vols.index' })
+    }
+
+    if (to.meta.guest && token) {
+        return next({ name: 'dashboard' })
+    }
+
+    return next()
 })
 
 export default router

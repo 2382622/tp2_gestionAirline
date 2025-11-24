@@ -3,7 +3,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="h4 mb-0">Liste des vols</h1>
-                <RouterLink class="btn btn-success" to="/vols/create">
+                <RouterLink v-if="isAdmin" class="btn btn-success" to="/vols/create">
                     Ajouter un vol
                 </RouterLink>
             </div>
@@ -35,7 +35,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="vol in vols" :key="vol.id">
+                            <tr
+                                v-for="vol in vols"
+                                :key="vol.id"
+                                :class="{ 'table-success': vol.has_ticket }"
+                            >
                                 <td>{{ vol.id }}</td>
                                 <td>{{ vol.origine }}</td>
                                 <td>{{ vol.destination }}</td>
@@ -74,6 +78,18 @@ export default {
     created() {
         this.fetchVols()
     },
+    computed: {
+        isAdmin() {
+            const raw = localStorage.getItem('user')
+            if (!raw) return false
+            try {
+                const user = JSON.parse(raw)
+                return user && user.role === 'admin'
+            } catch (e) {
+                return false
+            }
+        },
+    },
     methods: {
         async fetchVols() {
             this.loading = true
@@ -83,20 +99,13 @@ export default {
                 const response = await axios.get('/api/vols')
                 this.vols = response.data
             } catch (e) {
-                if (e.response && e.response.status === 401) {
-                    this.error =
-                        'Accès refusé. Veuillez vous connecter pour voir la liste des vols.'
-                } else {
-                    this.error = 'Impossible de charger les vols.'
-                }
+                this.error = 'Impossible de charger les vols.'
             } finally {
                 this.loading = false
             }
         },
         formatDate(value) {
-            if (!value) {
-                return ''
-            }
+            if (!value) return ''
             return new Date(value).toLocaleString()
         },
     },

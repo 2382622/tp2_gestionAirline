@@ -9,7 +9,6 @@ class Vol extends Model
 {
     use HasFactory;
 
-    // Comme la clé primaire est un string (id du vol) donc pas de autoIncrememnt
     public $incrementing = false;
     protected $keyType = 'string';
 
@@ -22,12 +21,16 @@ class Vol extends Model
         'prix',
         'efface',
         'avion_id',
-         'photo', 
+        'photo',
     ];
 
-    // Relation : un vol appartient à un avion
     public function avion()
     {
         return $this->belongsTo(Avion::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'vol_id', 'id');
     }
 }
