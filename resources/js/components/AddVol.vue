@@ -1,10 +1,10 @@
 <template>
     <div class="card shadow-sm">
         <div class="card-body">
-            <h1 class="h4 mb-3">Ajouter un vol</h1>
+            <h1 class="h4 mb-3">{{ isEdit ? 'Modifier un vol' : 'Ajouter un vol' }}</h1>
 
             <div v-if="success" class="alert alert-success">
-                Vol ajouté avec succès.
+                Vol enregistré avec succès.
             </div>
             <div v-if="error" class="alert alert-danger">
                 {{ error }}
@@ -19,6 +19,7 @@
                             v-model="form.id"
                             type="text"
                             class="form-control"
+                            :disabled="isEdit"
                             required
                         />
                     </div>
@@ -146,45 +147,77 @@ export default {
             success: false,
         }
     },
+    computed: {
+        isEdit() {
+            return Boolean(this.$route.params.id)
+        },
+    },
     created() {
         this.fetchAvions()
+        if (this.isEdit) {
+            this.fetchVol()
+        }
     },
     methods: {
-        async fetchAvions() {
+        setAuthHeader() {
             const token = localStorage.getItem('token')
             if (token) {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
             }
+        },
+        async fetchAvions() {
+            this.setAuthHeader()
             try {
                 const response = await axios.get('/api/avions')
                 this.avions = response.data
             } catch {
-                this.error =
-                    'Impossible de charger la liste des avions. Vérifiez que vous êtes connecté.'
+                this.error = 'Impossible de charger la liste des avions. Vérifiez que vous êtes connecté.'
+            }
+        },
+        async fetchVol() {
+            this.setAuthHeader()
+            try {
+                const { data } = await axios.get(`/api/vols/${this.$route.params.id}`)
+                this.form = {
+                    id: data.id,
+                    origine: data.origine,
+                    destination: data.destination,
+                    date_depart: data.date_depart,
+                    date_arrive: data.date_arrive,
+                    prix: data.prix,
+                    avion_id: data.avion_id,
+                    photo: data.photo || '',
+                }
+            } catch (e) {
+                this.error = 'Impossible de charger le vol.'
             }
         },
         async submit() {
-            const token = localStorage.getItem('token')
-            if (token) {
-                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-            }
+            this.setAuthHeader()
 
             this.loading = true
             this.error = null
             this.success = false
 
             try {
-                await axios.post('/api/vols', this.form)
+                if (this.isEdit) {
+                    await axios.put(`/api/vols/${this.$route.params.id}`, this.form)
+                } else {
+                    await axios.post('/api/vols', this.form)
+                }
+
                 this.success = true
-                this.form = {
-                    id: '',
-                    origine: '',
-                    destination: '',
-                    date_depart: '',
-                    date_arrive: '',
-                    prix: null,
-                    avion_id: '',
-                    photo: '',
+                if (!this.isEdit) {
+                    this.form = {
+                        id: '',
+                        origine: '',
+                        destination: '',
+                        date_depart: '',
+                        date_arrive: '',
+                        prix: null,
+                        avion_id: '',
+                        photo: '',
+                    }
                 }
             } catch (e) {
                 if (e.response && e.response.status === 401) {
@@ -194,7 +227,7 @@ export default {
                     const firstKey = Object.keys(errors)[0]
                     this.error = errors[firstKey][0]
                 } else {
-                    this.error = 'Impossible d’enregistrer le vol.'
+                    this.error = "Impossible d'enregistrer le vol."
                 }
             } finally {
                 this.loading = false

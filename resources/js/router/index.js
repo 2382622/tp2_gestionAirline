@@ -22,6 +22,12 @@ const routes = [
         component: AddVol,
         meta: { requiresAuth: true, requiresAdmin: true },
     },
+    {
+        path: '/vols/:id/edit',
+        name: 'vols.edit',
+        component: AddVol,
+        meta: { requiresAuth: true, requiresAdmin: true },
+    },
     { path: '/tickets', name: 'tickets.index', component: MyTickets, meta: { requiresAuth: true } },
 ]
 

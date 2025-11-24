@@ -32450,21 +32450,32 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       success: false
     };
   },
+  computed: {
+    isEdit: function isEdit() {
+      return Boolean(this.$route.params.id);
+    }
+  },
   created: function created() {
     this.fetchAvions();
+    if (this.isEdit) {
+      this.fetchVol();
+    }
   },
   methods: {
+    setAuthHeader: function setAuthHeader() {
+      var token = localStorage.getItem('token');
+      if (token) {
+        axios__WEBPACK_IMPORTED_MODULE_0__["default"].defaults.headers.common['Authorization'] = "Bearer ".concat(token);
+      }
+    },
     fetchAvions: function fetchAvions() {
       var _this = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-        var token, response, _t;
+        var response, _t;
         return _regenerator().w(function (_context) {
           while (1) switch (_context.p = _context.n) {
             case 0:
-              token = localStorage.getItem('token');
-              if (token) {
-                axios__WEBPACK_IMPORTED_MODULE_0__["default"].defaults.headers.common['Authorization'] = "Bearer ".concat(token);
-              }
+              _this.setAuthHeader();
               _context.p = 1;
               _context.n = 2;
               return axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/avions');
@@ -32483,57 +32494,102 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         }, _callee, null, [[1, 3]]);
       }))();
     },
-    submit: function submit() {
+    fetchVol: function fetchVol() {
       var _this2 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-        var token, errors, firstKey, _t2;
+        var _yield$axios$get, data, _t2;
         return _regenerator().w(function (_context2) {
           while (1) switch (_context2.p = _context2.n) {
             case 0:
-              token = localStorage.getItem('token');
-              if (token) {
-                axios__WEBPACK_IMPORTED_MODULE_0__["default"].defaults.headers.common['Authorization'] = "Bearer ".concat(token);
-              }
-              _this2.loading = true;
-              _this2.error = null;
-              _this2.success = false;
+              _this2.setAuthHeader();
               _context2.p = 1;
               _context2.n = 2;
-              return axios__WEBPACK_IMPORTED_MODULE_0__["default"].post('/api/vols', _this2.form);
+              return axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("/api/vols/".concat(_this2.$route.params.id));
             case 2:
-              _this2.success = true;
+              _yield$axios$get = _context2.v;
+              data = _yield$axios$get.data;
               _this2.form = {
-                id: '',
-                origine: '',
-                destination: '',
-                date_depart: '',
-                date_arrive: '',
-                prix: null,
-                avion_id: '',
-                photo: ''
+                id: data.id,
+                origine: data.origine,
+                destination: data.destination,
+                date_depart: data.date_depart,
+                date_arrive: data.date_arrive,
+                prix: data.prix,
+                avion_id: data.avion_id,
+                photo: data.photo || ''
               };
               _context2.n = 4;
               break;
             case 3:
               _context2.p = 3;
               _t2 = _context2.v;
-              if (_t2.response && _t2.response.status === 401) {
-                _this2.error = 'Accès refusé. Veuillez vous connecter.';
-              } else if (_t2.response && _t2.response.data && _t2.response.data.errors) {
-                errors = _t2.response.data.errors;
-                firstKey = Object.keys(errors)[0];
-                _this2.error = errors[firstKey][0];
-              } else {
-                _this2.error = 'Impossible d’enregistrer le vol.';
-              }
+              _this2.error = 'Impossible de charger le vol.';
             case 4:
-              _context2.p = 4;
-              _this2.loading = false;
-              return _context2.f(4);
-            case 5:
               return _context2.a(2);
           }
-        }, _callee2, null, [[1, 3, 4, 5]]);
+        }, _callee2, null, [[1, 3]]);
+      }))();
+    },
+    submit: function submit() {
+      var _this3 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+        var errors, firstKey, _t3;
+        return _regenerator().w(function (_context3) {
+          while (1) switch (_context3.p = _context3.n) {
+            case 0:
+              _this3.setAuthHeader();
+              _this3.loading = true;
+              _this3.error = null;
+              _this3.success = false;
+              _context3.p = 1;
+              if (!_this3.isEdit) {
+                _context3.n = 3;
+                break;
+              }
+              _context3.n = 2;
+              return axios__WEBPACK_IMPORTED_MODULE_0__["default"].put("/api/vols/".concat(_this3.$route.params.id), _this3.form);
+            case 2:
+              _context3.n = 4;
+              break;
+            case 3:
+              _context3.n = 4;
+              return axios__WEBPACK_IMPORTED_MODULE_0__["default"].post('/api/vols', _this3.form);
+            case 4:
+              _this3.success = true;
+              if (!_this3.isEdit) {
+                _this3.form = {
+                  id: '',
+                  origine: '',
+                  destination: '',
+                  date_depart: '',
+                  date_arrive: '',
+                  prix: null,
+                  avion_id: '',
+                  photo: ''
+                };
+              }
+              _context3.n = 6;
+              break;
+            case 5:
+              _context3.p = 5;
+              _t3 = _context3.v;
+              if (_t3.response && _t3.response.status === 401) {
+                _this3.error = 'Accès refusé. Veuillez vous connecter.';
+              } else if (_t3.response && _t3.response.data && _t3.response.data.errors) {
+                errors = _t3.response.data.errors;
+                firstKey = Object.keys(errors)[0];
+                _this3.error = errors[firstKey][0];
+              } else {
+                _this3.error = "Impossible d'enregistrer le vol.";
+              }
+            case 6:
+              _context3.p = 6;
+              _this3.loading = false;
+              return _context3.f(6);
+            case 7:
+              return _context3.a(2);
+          }
+        }, _callee3, null, [[1, 5, 6, 7]]);
       }))();
     }
   }
@@ -33335,61 +33391,63 @@ var _hoisted_2 = {
   "class": "card-body"
 };
 var _hoisted_3 = {
+  "class": "h4 mb-3"
+};
+var _hoisted_4 = {
   key: 0,
   "class": "alert alert-success"
 };
-var _hoisted_4 = {
+var _hoisted_5 = {
   key: 1,
   "class": "alert alert-danger"
 };
-var _hoisted_5 = {
-  "class": "row"
-};
 var _hoisted_6 = {
-  "class": "col-md-4 mb-3"
+  "class": "row"
 };
 var _hoisted_7 = {
   "class": "col-md-4 mb-3"
 };
-var _hoisted_8 = {
-  "class": "col-md-4 mb-3"
-};
+var _hoisted_8 = ["disabled"];
 var _hoisted_9 = {
-  "class": "row"
+  "class": "col-md-4 mb-3"
 };
 var _hoisted_10 = {
-  "class": "col-md-6 mb-3"
+  "class": "col-md-4 mb-3"
 };
 var _hoisted_11 = {
-  "class": "col-md-6 mb-3"
-};
-var _hoisted_12 = {
   "class": "row"
 };
+var _hoisted_12 = {
+  "class": "col-md-6 mb-3"
+};
 var _hoisted_13 = {
-  "class": "col-md-4 mb-3"
+  "class": "col-md-6 mb-3"
 };
 var _hoisted_14 = {
+  "class": "row"
+};
+var _hoisted_15 = {
   "class": "col-md-4 mb-3"
 };
-var _hoisted_15 = ["value"];
 var _hoisted_16 = {
   "class": "col-md-4 mb-3"
 };
-var _hoisted_17 = ["disabled"];
+var _hoisted_17 = ["value"];
 var _hoisted_18 = {
+  "class": "col-md-4 mb-3"
+};
+var _hoisted_19 = ["disabled"];
+var _hoisted_20 = {
   key: 0,
   "class": "spinner-border spinner-border-sm me-2"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_RouterLink = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("RouterLink");
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[21] || (_cache[21] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
-    "class": "h4 mb-3"
-  }, "Ajouter un vol", -1 /* CACHED */)), $data.success ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, " Vol ajouté avec succès. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.error ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.error), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.isEdit ? 'Modifier un vol' : 'Ajouter un vol'), 1 /* TEXT */), $data.success ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, " Vol enregistré avec succès. ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.error ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.error), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
     onSubmit: _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.submit && $options.submit.apply($options, arguments);
     }, ["prevent"]))
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-label",
     "for": "vol-id"
   }, "Code du vol", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -33399,8 +33457,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     type: "text",
     "class": "form-control",
+    disabled: $options.isEdit,
     required: ""
-  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.id]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 8 /* PROPS */, _hoisted_8), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.id]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-label",
     "for": "vol-origine"
   }, "Origine", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -33411,7 +33470,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "text",
     "class": "form-control",
     required: ""
-  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.origine]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.origine]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-label",
     "for": "vol-destination"
   }, "Destination", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -33422,7 +33481,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "text",
     "class": "form-control",
     required: ""
-  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.destination]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [_cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.destination]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-label",
     "for": "vol-depart"
   }, "Date de départ", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -33433,7 +33492,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "datetime-local",
     "class": "form-control",
     required: ""
-  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.date_depart]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.date_depart]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [_cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-label",
     "for": "vol-arrivee"
   }, "Date d’arrivée", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -33444,7 +33503,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "datetime-local",
     "class": "form-control",
     required: ""
-  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.date_arrive]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [_cache[14] || (_cache[14] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.date_arrive]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [_cache[14] || (_cache[14] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-label",
     "for": "vol-prix"
   }, "Prix ($)", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -33459,7 +33518,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     required: ""
   }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.prix, void 0, {
     number: true
-  }]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [_cache[16] || (_cache[16] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [_cache[16] || (_cache[16] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-label",
     "for": "vol-avion"
   }, "Avion", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
@@ -33476,8 +33535,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
       key: avion.id,
       value: avion.id
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(avion.modele) + " (" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(avion.capacite) + " pl.) ", 9 /* TEXT, PROPS */, _hoisted_15);
-  }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.form.avion_id]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [_cache[17] || (_cache[17] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(avion.modele) + " (" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(avion.capacite) + " pl.) ", 9 /* TEXT, PROPS */, _hoisted_17);
+  }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.form.avion_id]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [_cache[17] || (_cache[17] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-label",
     "for": "vol-photo"
   }, "Photo (nom de fichier)", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -33494,7 +33553,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "submit",
     "class": "btn btn-success",
     disabled: $data.loading
-  }, [$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_18)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _cache[19] || (_cache[19] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Enregistrer le vol ", -1 /* CACHED */))], 8 /* PROPS */, _hoisted_17), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_RouterLink, {
+  }, [$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_20)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _cache[19] || (_cache[19] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Enregistrer le vol ", -1 /* CACHED */))], 8 /* PROPS */, _hoisted_19), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_RouterLink, {
     "class": "btn btn-link",
     to: "/vols"
   }, {
@@ -62453,6 +62512,14 @@ var routes = [{
 }, {
   path: '/vols/create',
   name: 'vols.create',
+  component: _components_AddVol_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
+  meta: {
+    requiresAuth: true,
+    requiresAdmin: true
+  }
+}, {
+  path: '/vols/:id/edit',
+  name: 'vols.edit',
   component: _components_AddVol_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
   meta: {
     requiresAuth: true,
