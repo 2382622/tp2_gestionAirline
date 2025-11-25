@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Vol extends Model
 {
@@ -23,6 +24,7 @@ class Vol extends Model
         'avion_id',
         'photo',
     ];
+    protected $appends = ['photo_url'];
 
     public function avion()
     {
@@ -32,5 +34,14 @@ class Vol extends Model
     public function tickets()
     {
         return $this->hasMany(Ticket::class, 'vol_id', 'id');
+    }
+
+    public function getPhotoUrlAttribute(): ?string
+    {
+        if (!$this->photo) {
+            return null;
+        }
+
+        return Storage::disk('public')->url($this->photo);
     }
 }

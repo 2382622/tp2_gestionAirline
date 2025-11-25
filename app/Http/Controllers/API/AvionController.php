@@ -17,12 +17,18 @@ class AvionController extends Controller
     // POST /api/avions
     public function store(Request $request)
     {
+        $this->verifierAdmin($request);
+
         $data = $request->validate([
             'modele' => 'required|string|max:255',
             'capacite' => 'required|integer|min:1',
         ]);
 
-        $avion = Avion::create($data);
+        $avion = new Avion();
+        $avion->modele = $data['modele'];
+        $avion->capacite = $data['capacite'];
+
+        $avion->save();
 
         return response()->json($avion, 201);
     }
@@ -38,6 +44,8 @@ class AvionController extends Controller
     // PUT /api/avions/{id}
     public function update(Request $request, int $id)
     {
+        $this->verifierAdmin($request);
+
         $avion = Avion::findOrFail($id);
 
         $data = $request->validate([
@@ -45,7 +53,14 @@ class AvionController extends Controller
             'capacite' => 'sometimes|required|integer|min:1',
         ]);
 
-        $avion->update($data);
+        if (isset($data['modele'])) {
+            $avion->modele = $data['modele'];
+        }
+        if (isset($data['capacite'])) {
+            $avion->capacite = $data['capacite'];
+        }
+
+        $avion->save();
 
         return response()->json($avion);
     }
@@ -53,9 +68,19 @@ class AvionController extends Controller
     // DELETE /api/avions/{id}
     public function destroy(int $id)
     {
+        $this->verifierAdmin(request());
+
         $avion = Avion::findOrFail($id);
         $avion->delete();
 
         return response()->json(null, 204);
+    }
+
+    private function verifierAdmin(Request $request): void
+    {
+        $user = $request->user();
+        if (!$user || $user->role !== 'admin') {
+            abort(403, 'Accès réservé aux administrateurs.');
+        }
     }
 }

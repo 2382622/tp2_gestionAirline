@@ -1,64 +1,39 @@
 <template>
-    <div class="row justify-content-center">
-        <div class="col-md-7">
+    <div class="modal-mask">
+        <div class="modal-dialog">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h1 class="h4 mb-3">Inscription</h1>
-
-                    <div v-if="error" class="alert alert-danger">
-                        {{ error }}
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h1 class="h4 mb-0">Inscription</h1>
+                        <RouterLink class="btn-close" to="/" aria-label="Fermer"></RouterLink>
                     </div>
+
+                    <div v-if="error" class="alert alert-danger">{{ error }}</div>
 
                     <form @submit.prevent="submit">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label" for="register-name">Nom</label>
-                                <input
-                                    id="register-name"
-                                    v-model="name"
-                                    type="text"
-                                    class="form-control"
-                                    required
-                                />
+                                <input id="register-name" v-model="name" type="text" class="form-control" required />
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label" for="register-prenom">Prénom</label>
-                                <input
-                                    id="register-prenom"
-                                    v-model="prenom"
-                                    type="text"
-                                    class="form-control"
-                                    required
-                                />
+                                <input id="register-prenom" v-model="prenom" type="text" class="form-control" required />
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label" for="register-email">Courriel</label>
-                            <input
-                                id="register-email"
-                                v-model="email"
-                                type="email"
-                                class="form-control"
-                                required
-                            />
+                            <input id="register-email" v-model="email" type="email" class="form-control" required />
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label" for="register-password">Mot de passe</label>
-                                <input
-                                    id="register-password"
-                                    v-model="password"
-                                    type="password"
-                                    class="form-control"
-                                    required
-                                />
+                                <input id="register-password" v-model="password" type="password" class="form-control" required />
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label" for="register-password-confirm">
-                                    Confirmation
-                                </label>
+                                <label class="form-label" for="register-password-confirm">Confirmation</label>
                                 <input
                                     id="register-password-confirm"
                                     v-model="passwordConfirmation"
@@ -69,14 +44,19 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-success" :disabled="loading">
-                            <span v-if="loading" class="spinner-border spinner-border-sm me-2" />
-                            Créer mon compte
-                        </button>
+                        <div class="mb-3">
+                            <label class="form-label">reCAPTCHA</label>
+                            <div ref="recaptchaContainer" class="recaptcha-box"></div>
+                        </div>
 
-                        <RouterLink class="btn btn-link" to="/login">
-                            Déjà inscrit ? Se connecter
-                        </RouterLink>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="submit" class="btn btn-success" :disabled="loading">
+                                <span v-if="loading" class="spinner-border spinner-border-sm me-2" />
+                                Créer mon compte
+                            </button>
+
+                            <RouterLink class="btn btn-link" to="/login">Déjà inscrit ? Se connecter</RouterLink>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -98,13 +78,62 @@ export default {
             email: '',
             password: '',
             passwordConfirmation: '',
+            recaptchaToken: '',
+            recaptchaWidgetId: null,
+            captchaInterval: null,
             loading: false,
             error: null,
         }
     },
+    mounted() {
+        this.waitAndRenderCaptcha()
+    },
+    beforeUnmount() {
+        if (this.captchaInterval) {
+            clearInterval(this.captchaInterval)
+        }
+        this.resetCaptcha()
+    },
     methods: {
+        waitAndRenderCaptcha() {
+            const siteKey = window.RECAPTCHA_SITE_KEY || ''
+            if (!siteKey) {
+                this.error = 'reCAPTCHA non configuré.'
+                return
+            }
+
+            this.captchaInterval = setInterval(() => {
+                if (window.grecaptcha && window.grecaptcha.render && this.$refs.recaptchaContainer) {
+                    clearInterval(this.captchaInterval)
+                    this.captchaInterval = null
+                    this.recaptchaWidgetId = window.grecaptcha.render(this.$refs.recaptchaContainer, {
+                        sitekey: siteKey,
+                        callback: (token) => {
+                            this.recaptchaToken = token
+                            this.error = null
+                        },
+                        'error-callback': () => {
+                            this.recaptchaToken = ''
+                            this.error = 'Captcha invalide.'
+                        },
+                        'expired-callback': () => {
+                            this.recaptchaToken = ''
+                        },
+                    })
+                }
+            }, 300)
+        },
+        resetCaptcha() {
+            if (window.grecaptcha && this.recaptchaWidgetId !== null) {
+                window.grecaptcha.reset(this.recaptchaWidgetId)
+            }
+            this.recaptchaToken = ''
+        },
         async submit() {
-            this.error = null
+            if (!this.recaptchaToken) {
+                this.error = 'Merci de valider le captcha.'
+                return
+            }
 
             if (this.password !== this.passwordConfirmation) {
                 this.error = 'Les mots de passe ne correspondent pas.'
@@ -112,13 +141,16 @@ export default {
             }
 
             this.loading = true
+            this.error = null
 
             try {
+                await axios.get('/sanctum/csrf-cookie')
                 const response = await axios.post('/api/register', {
                     name: this.name,
                     prenom: this.prenom,
                     email: this.email,
                     password: this.password,
+                    recaptcha_token: this.recaptchaToken,
                 })
 
                 const { token, user } = response.data
@@ -136,6 +168,7 @@ export default {
                 } else {
                     this.error = 'Une erreur est survenue. Veuillez réessayer.'
                 }
+                this.resetCaptcha()
             } finally {
                 this.loading = false
             }
@@ -143,3 +176,24 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+.modal-mask {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    z-index: 1050;
+    pointer-events: none;
+}
+.modal-dialog {
+    width: min(620px, 100%);
+    pointer-events: auto;
+}
+.recaptcha-box {
+    min-height: 78px;
+}
+</style>

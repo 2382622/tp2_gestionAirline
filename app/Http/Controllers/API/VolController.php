@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Vol;
-use App\Models\Avion;
+use Illuminate\Support\Facades\Storage;
 
 class VolController extends Controller
 {
@@ -32,6 +32,8 @@ class VolController extends Controller
     // POST /api/vols
     public function store(Request $request)
     {
+        $this->verifierAdmin($request);
+
         $data = $request->validate([
             'id' => 'required|string|unique:vols,id',
             'origine' => 'required|string|max:255',
@@ -40,11 +42,16 @@ class VolController extends Controller
             'date_arrive' => 'required|date|after:date_depart',
             'prix' => 'required|numeric|min:0',
             'avion_id' => 'required|exists:avions,id',
-            // ici l’API attend juste le nom éventuel du fichier
-            'photo' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
         ]);
 
-        $vol = Vol::create($data);
+        $vol = new Vol($data);
+
+        if ($request->hasFile('photo')) {
+            $vol->photo = $request->file('photo')->store('vols', 'public');
+        }
+
+        $vol->save();
 
         return response()->json($vol, 201);
     }
@@ -59,6 +66,8 @@ class VolController extends Controller
     // PUT /api/vols/{id}
     public function update(Request $request, string $id)
     {
+        $this->verifierAdmin($request);
+
         $vol = Vol::findOrFail($id);
 
         $data = $request->validate([
@@ -68,10 +77,19 @@ class VolController extends Controller
             'date_arrive' => 'sometimes|required|date|after:date_depart',
             'prix' => 'sometimes|required|numeric|min:0',
             'avion_id' => 'sometimes|required|exists:avions,id',
-            'photo' => 'sometimes|nullable|string|max:255',
+            'photo' => 'sometimes|nullable|image|mimes:jpg,jpeg,png|max:4096',
         ]);
 
-        $vol->update($data);
+        $vol->fill($data);
+
+        if ($request->hasFile('photo')) {
+            if ($vol->photo) {
+                Storage::disk('public')->delete($vol->photo);
+            }
+            $vol->photo = $request->file('photo')->store('vols', 'public');
+        }
+
+        $vol->save();
 
         return response()->json($vol);
     }
@@ -79,7 +97,12 @@ class VolController extends Controller
     // DELETE /api/vols/{id}
     public function destroy(string $id)
     {
+        $this->verifierAdmin(request());
+
         $vol = Vol::findOrFail($id);
+        if ($vol->photo) {
+            Storage::disk('public')->delete($vol->photo);
+        }
         $vol->delete();
 
         return response()->json(null, 204);
@@ -100,5 +123,30 @@ class VolController extends Controller
             ->get();
 
         return response()->json($vols);
+    }
+
+    // GET /api/vols-search?q=
+    public function search(Request $request)
+    {
+        $q = $request->query('q', '');
+
+        $vols = Vol::with('avion')
+            ->where(function ($query) use ($q) {
+                $query->where('origine', 'like', "%{$q}%")
+                    ->orWhere('destination', 'like', "%{$q}%")
+                    ->orWhere('id', 'like', "%{$q}%");
+            })
+            ->limit(10)
+            ->get();
+
+        return response()->json($vols);
+    }
+
+    private function verifierAdmin(Request $request): void
+    {
+        $user = $request->user();
+        if (!$user || $user->role !== 'admin') {
+            abort(403, 'Accès réservé aux administrateurs.');
+        }
     }
 }

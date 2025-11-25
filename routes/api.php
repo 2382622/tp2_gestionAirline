@@ -20,11 +20,13 @@ Route::post('/login', [AuthController::class, 'login']);
 // Lecture publique des vols
 Route::get('/vols', [VolApiController::class, 'index']);
 Route::get('/vols-home', [VolApiController::class, 'homeRandom']);
+Route::get('/vols-search', [VolApiController::class, 'search']);
 // Lecture publique des avions (pour formulaires)
 Route::get('/avions', [AvionApiController::class, 'index']);
 
 // Routes protégées Sanctum
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
     Route::apiResource('users', UserApiController::class);
     Route::apiResource('vols', VolApiController::class)->except(['index']);
     Route::apiResource('avions', AvionApiController::class)->except(['index']);

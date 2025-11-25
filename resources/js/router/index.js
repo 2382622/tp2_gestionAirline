@@ -8,6 +8,8 @@ import Dashboard from '../pages/Dashboard.vue'
 import ListVols from '../components/ListVols.vue'
 import AddVol from '../components/AddVol.vue'
 import MyTickets from '../pages/MyTickets.vue'
+import AvionsAdmin from '../pages/AvionsAdmin.vue'
+import Search from '../pages/Search.vue'
 
 const routes = [
     { path: '/', name: 'home', component: Home },
@@ -28,6 +30,13 @@ const routes = [
         component: AddVol,
         meta: { requiresAuth: true, requiresAdmin: true },
     },
+    {
+        path: '/avions',
+        name: 'avions.index',
+        component: AvionsAdmin,
+        meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    { path: '/recherche', name: 'search', component: Search },
     { path: '/tickets', name: 'tickets.index', component: MyTickets, meta: { requiresAuth: true } },
 ]
 

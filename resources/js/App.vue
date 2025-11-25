@@ -27,8 +27,11 @@
                         <li class="nav-item">
                             <RouterLink class="nav-link" to="/tickets">Mes billets</RouterLink>
                         </li>
+                        <li class="nav-item">
+                            <RouterLink class="nav-link" to="/recherche">Recherche</RouterLink>
+                        </li>
                         <li class="nav-item" v-if="isAdmin">
-                            <a class="nav-link" href="/avions">Liste Avions</a>
+                            <RouterLink class="nav-link" :to="{ name: 'avions.index' }">Liste Avions</RouterLink>
                         </li>
                     </ul>
 
@@ -110,7 +113,16 @@ export default {
         }
     },
     methods: {
-        logout() {
+        async logout() {
+            const token = localStorage.getItem('token')
+            if (token) {
+                axios.defaults.headers.common.Authorization = `Bearer ${token}`
+                try {
+                    await axios.post('/api/logout')
+                } catch (e) {
+                    // ignore erreurs de déconnexion
+                }
+            }
             localStorage.removeItem('token')
             localStorage.removeItem('user')
             delete axios.defaults.headers.common.Authorization
