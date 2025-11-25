@@ -3,15 +3,23 @@
         <div class="col-md-7 mb-4">
             <h1 class="mb-3">Bienvenue sur Gestion Airline</h1>
             <p>
-                Connectez-vous pour consulter la liste complète des vols, créer un
-                nouveau vol ou gérer vos tickets.
+                Connectez-vous pour consulter la liste complète des vols, créer
+                un nouveau vol ou gérer vos tickets.
             </p>
 
             <div class="mt-4">
-                <RouterLink v-if="!isAuthenticated" class="btn btn-primary me-2" to="/login">
+                <RouterLink
+                    v-if="!isAuthenticated"
+                    class="btn btn-primary me-2"
+                    to="/login"
+                >
                     Se connecter
                 </RouterLink>
-                <RouterLink v-if="!isAuthenticated" class="btn btn-outline-secondary" to="/register">
+                <RouterLink
+                    v-if="!isAuthenticated"
+                    class="btn btn-outline-secondary"
+                    to="/register"
+                >
                     Créer un compte
                 </RouterLink>
             </div>
@@ -20,10 +28,15 @@
         <div class="col-md-5">
             <div class="card shadow-sm h-100">
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title mb-3">Vols en provenance de Montréal</h5>
+                    <h5 class="card-title mb-3">
+                        Vols en provenance de Montréal
+                    </h5>
 
                     <div v-if="loading" class="text-center my-3">
-                        <div class="spinner-border text-primary" role="status" />
+                        <div
+                            class="spinner-border text-primary"
+                            role="status"
+                        />
                     </div>
 
                     <div v-else-if="error" class="alert alert-danger">
@@ -32,7 +45,8 @@
 
                     <ul v-else class="list-unstyled mb-0">
                         <li v-if="vols.length === 0" class="text-muted">
-                            Aucun vol trouvé au départ ou à destination de Montréal.
+                            Aucun vol trouvé au départ ou à destination de
+                            Montréal.
                         </li>
                         <li
                             v-for="vol in vols"
@@ -57,48 +71,38 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { RouterLink } from 'vue-router'
+import axios from "axios";
+import { RouterLink } from "vue-router";
 
 export default {
-    name: 'Home',
+    name: "Home",
     components: { RouterLink },
     data() {
         return {
             vols: [],
             loading: false,
             error: null,
-        }
+        };
     },
     computed: {
         isAuthenticated() {
-            return !!localStorage.getItem('token')
+            return !!localStorage.getItem("token");
         },
     },
     created() {
-        this.fetchRandomVols()
+        this.fetchRandomVols();
     },
     methods: {
         async fetchRandomVols() {
-            this.loading = true
-            this.error = null
-
-            try {
-                const response = await axios.get('/api/vols-home')
-                this.vols = response.data
-            } catch (e) {
-                this.error = "Impossible de charger les vols de Montréal."
-            } finally {
-                this.loading = false
-            }
+            this.loading = true;
+            this.error = null;
         },
         formatDate(value) {
             if (!value) {
-                return ''
+                return "";
             }
-            return new Date(value).toLocaleString()
+            return new Date(value).toLocaleString();
         },
     },
-}
+};
 </script>
-

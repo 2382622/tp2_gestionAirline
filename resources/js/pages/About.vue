@@ -8,7 +8,7 @@
             </p>
             <p class="mb-3">
                 <strong>Cours :</strong> 420-267 MO Développer un site Web et
-                une application pour Internet — Automne 2021, Collège
+                une application pour Internet — Automne 2025, Collège
                 Montmorency.
             </p>
 
