@@ -32813,7 +32813,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'About'
+  name: "About"
 });
 
 /***/ }),
@@ -32836,7 +32836,7 @@ function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'AvionsAdmin',
+  name: "AvionsAdmin",
   data: function data() {
     return {
       avions: [],
@@ -32845,7 +32845,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       success: null,
       editingId: null,
       form: {
-        modele: '',
+        modele: "",
         capacite: 0
       }
     };
@@ -32856,7 +32856,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
   },
   methods: {
     setAuthHeader: function setAuthHeader() {
-      var token = localStorage.getItem('token');
+      var token = localStorage.getItem("token");
       if (token) {
         axios__WEBPACK_IMPORTED_MODULE_0__["default"].defaults.headers.common.Authorization = "Bearer ".concat(token);
       }
@@ -32864,33 +32864,16 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     fetchAvions: function fetchAvions() {
       var _this = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-        var response, _t;
         return _regenerator().w(function (_context) {
-          while (1) switch (_context.p = _context.n) {
+          while (1) switch (_context.n) {
             case 0:
               _this.loading = true;
               _this.error = null;
               _this.success = null;
-              _context.p = 1;
-              _context.n = 2;
-              return axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/avions');
-            case 2:
-              response = _context.v;
-              _this.avions = response.data;
-              _context.n = 4;
-              break;
-            case 3:
-              _context.p = 3;
-              _t = _context.v;
-              _this.error = "Impossible de charger les avions. Vérifiez votre connexion ou vos droits d'accès.";
-            case 4:
-              _context.p = 4;
-              _this.loading = false;
-              return _context.f(4);
-            case 5:
+            case 1:
               return _context.a(2);
           }
-        }, _callee, null, [[1, 3, 4, 5]]);
+        }, _callee);
       }))();
     },
     startEdit: function startEdit(avion) {
@@ -32905,18 +32888,18 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     cancelEdit: function cancelEdit() {
       this.editingId = null;
       this.form = {
-        modele: '',
+        modele: "",
         capacite: 0
       };
     },
     deleteAvion: function deleteAvion(avion) {
       var _this2 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-        var _t2;
+        var _t;
         return _regenerator().w(function (_context2) {
           while (1) switch (_context2.p = _context2.n) {
             case 0:
-              if (window.confirm('Supprimer cet avion ?')) {
+              if (window.confirm("Supprimer cet avion ?")) {
                 _context2.n = 1;
                 break;
               }
@@ -32932,13 +32915,13 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               _this2.avions = _this2.avions.filter(function (a) {
                 return a.id !== avion.id;
               });
-              _this2.success = 'Avion supprimé.';
+              _this2.success = "Avion supprimé.";
               _context2.n = 5;
               break;
             case 4:
               _context2.p = 4;
-              _t2 = _context2.v;
-              _this2.error = 'Impossible de supprimer cet avion.';
+              _t = _context2.v;
+              _this2.error = "Impossible de supprimer cet avion.";
             case 5:
               return _context2.a(2);
           }
@@ -32948,7 +32931,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     saveEdit: function saveEdit(avion) {
       var _this3 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-        var response, _t3;
+        var response, _t2;
         return _regenerator().w(function (_context3) {
           while (1) switch (_context3.p = _context3.n) {
             case 0:
@@ -32956,7 +32939,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 _context3.n = 1;
                 break;
               }
-              _this3.error = 'Modele et capacité sont requis.';
+              _this3.error = "Modele et capacité sont requis.";
               return _context3.a(2);
             case 1:
               _this3.setAuthHeader();
@@ -32970,14 +32953,14 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             case 3:
               response = _context3.v;
               Object.assign(avion, response.data);
-              _this3.success = 'Avion mis à jour.';
+              _this3.success = "Avion mis à jour.";
               _this3.cancelEdit();
               _context3.n = 5;
               break;
             case 4:
               _context3.p = 4;
-              _t3 = _context3.v;
-              _this3.error = 'Impossible de mettre à jour cet avion.';
+              _t2 = _context3.v;
+              _this3.error = "Impossible de mettre à jour cet avion.";
             case 5:
               return _context3.a(2);
           }
@@ -33044,8 +33027,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.mjs");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.mjs");
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -33053,9 +33035,9 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'Home',
+  name: "Home",
   components: {
-    RouterLink: vue_router__WEBPACK_IMPORTED_MODULE_1__.RouterLink
+    RouterLink: vue_router__WEBPACK_IMPORTED_MODULE_0__.RouterLink
   },
   data: function data() {
     return {
@@ -33066,7 +33048,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
   },
   computed: {
     isAuthenticated: function isAuthenticated() {
-      return !!localStorage.getItem('token');
+      return !!localStorage.getItem("token");
     }
   },
   created: function created() {
@@ -33076,37 +33058,20 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     fetchRandomVols: function fetchRandomVols() {
       var _this = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-        var response, _t;
         return _regenerator().w(function (_context) {
-          while (1) switch (_context.p = _context.n) {
+          while (1) switch (_context.n) {
             case 0:
               _this.loading = true;
               _this.error = null;
-              _context.p = 1;
-              _context.n = 2;
-              return axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/vols-home');
-            case 2:
-              response = _context.v;
-              _this.vols = response.data;
-              _context.n = 4;
-              break;
-            case 3:
-              _context.p = 3;
-              _t = _context.v;
-              _this.error = "Impossible de charger les vols de Montréal.";
-            case 4:
-              _context.p = 4;
-              _this.loading = false;
-              return _context.f(4);
-            case 5:
+            case 1:
               return _context.a(2);
           }
-        }, _callee, null, [[1, 3, 4, 5]]);
+        }, _callee);
       }))();
     },
     formatDate: function formatDate(value) {
       if (!value) {
-        return '';
+        return "";
       }
       return new Date(value).toLocaleString();
     }
@@ -34316,7 +34281,7 @@ var _hoisted_1 = {
   "class": "card shadow-sm"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, _toConsumableArray(_cache[0] || (_cache[0] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-body\"><h1 class=\"h4 mb-3\">À propos</h1><p class=\"mb-1\"><strong>Nom :</strong> Votre Nom Ici</p><p class=\"mb-3\"><strong>Cours :</strong> 420-267 MO Développer un site Web et une application pour Internet — Automne 2021, Collège Montmorency. </p><h2 class=\"h5 mt-4\">Comment vérifier l’application</h2><ol><li>Créer un compte (captcha requis) via le popup d’inscription, ou se connecter si admin.</li><li>Avec un compte admin : créer/éditer/supprimer un vol (popup avec drag &amp; drop d’image) et un avion.</li><li>Avec un compte client : acheter des billets, consulter “Mes billets” (seulement vos billets).</li><li>Tester l’autocomplétion via la page “Recherche” (origine/destination/code).</li><li>Vérifier l’API via Postman : utiliser le token Sanctum (login) pour POST/PUT/DELETE sur vols/avions.</li></ol><h2 class=\"h5 mt-4\">Diagramme BD</h2><pre class=\"bg-light p-3 rounded small\">users (id, name, prenom, email, password, role)\n    └─&lt; tickets.user_id\navions (id, modele, capacite, image_path)\n    └─&lt; vols.avion_id\nvols (id, origine, destination, date_depart, date_arrive, prix, photo)\n    └─&lt; tickets.vol_id\ntickets (id, vol_id, user_id, quantite)\n            </pre></div>", 1)])));
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, _toConsumableArray(_cache[0] || (_cache[0] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-body\"><h1 class=\"h4 mb-3\">À propos</h1><p class=\"mb-1\"><strong>Nom :</strong> Kouanda Yuan Dietrich - Sirine Magra - Samuel Granger </p><p class=\"mb-3\"><strong>Cours :</strong> 420-267 MO Développer un site Web et une application pour Internet — Automne 2025, Collège Montmorency. </p><h2 class=\"h5 mt-4\">Comment vérifier l’application</h2><ol><li> Créer un compte (captcha requis) via le popup d’inscription, ou se connecter. </li><li> Avec un compte admin : créer/éditer/supprimer un vol (popup avec drag &amp; drop d’image) et un avion. </li><li> Avec un compte client : acheter des billets, consulter “Mes billets” (seulement vos billets). </li><li> Consulter la liste des vols, avec filtres (date, prix, destination). </li></ol><h2 class=\"h5 mt-4\">Diagramme BD</h2></div>", 1)])));
 }
 
 /***/ }),
@@ -34421,12 +34386,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       onClick: function onClick($event) {
         return $options.saveEdit(avion);
       }
-    }, "Enregistrer", 8 /* PROPS */, _hoisted_13), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    }, " Enregistrer ", 8 /* PROPS */, _hoisted_13), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       "class": "btn btn-sm btn-outline-secondary",
       onClick: _cache[2] || (_cache[2] = function () {
         return $options.cancelEdit && $options.cancelEdit.apply($options, arguments);
       })
-    }, "Annuler")], 64 /* STABLE_FRAGMENT */)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    }, " Annuler ")], 64 /* STABLE_FRAGMENT */)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
       key: 1
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       "class": "btn btn-sm btn-outline-primary me-2",
@@ -34442,7 +34407,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }), 128 /* KEYED_FRAGMENT */)), !$data.avions.length && !$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_16, _toConsumableArray(_cache[4] || (_cache[4] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
     colspan: "4",
     "class": "text-center text-muted"
-  }, "Aucun avion trouvé.", -1 /* CACHED */)])))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]))])]);
+  }, " Aucun avion trouvé. ", -1 /* CACHED */)])))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]))])]);
 }
 
 /***/ }),
@@ -34611,7 +34576,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1 /* STABLE */
   })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [_cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", {
     "class": "card-title mb-3"
-  }, "Vols en provenance de Montréal", -1 /* CACHED */)), $data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, _toConsumableArray(_cache[4] || (_cache[4] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  }, " Vols en provenance de Montréal ", -1 /* CACHED */)), $data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, _toConsumableArray(_cache[4] || (_cache[4] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "spinner-border text-primary",
     role: "status"
   }, null, -1 /* CACHED */)])))) : $data.error ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.error), 1 /* TEXT */)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("ul", _hoisted_9, [$data.vols.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", _hoisted_10, " Aucun vol trouvé au départ ou à destination de Montréal. ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {

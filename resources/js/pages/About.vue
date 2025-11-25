@@ -16,7 +16,7 @@
             <ol>
                 <li>
                     Créer un compte (captcha requis) via le popup d’inscription,
-                    ou se connecter si admin.
+                    ou se connecter.
                 </li>
                 <li>
                     Avec un compte admin : créer/éditer/supprimer un vol (popup
