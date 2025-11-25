@@ -179,6 +179,12 @@ export default {
             this.selectedVol = null
         },
     },
+    watch: {
+        // Ferme la modale de détails si on change de page (évite de bloquer les interactions)
+        $route() {
+            this.selectedVol = null
+        },
+    },
 }
 </script>
 
@@ -266,11 +272,11 @@ export default {
     align-items: center;
     padding: 1rem;
     z-index: 1050;
-    pointer-events: none;
+    pointer-events: auto !important;
 }
 .modal-dialog {
     width: min(600px, 100%);
-    pointer-events: auto;
+    pointer-events: auto !important;
 }
 .modal-card {
     background: #fff;

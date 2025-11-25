@@ -155,7 +155,7 @@ export default {
     align-items: center;
     padding: 1rem;
     z-index: 1050;
-    pointer-events: none;
+    pointer-events: auto;
 }
 .modal-dialog {
     width: min(520px, 100%);

@@ -32494,6 +32494,8 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     if (this.isEdit) {
       this.fetchVol();
     }
+    // Assure que le focus clavier reste possible même si un overlay précédent est resté affiché
+    document.body.classList.remove('modal-open-block');
   },
   methods: {
     setAuthHeader: function setAuthHeader() {
@@ -32794,6 +32796,12 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       this.selectedVol = vol;
     },
     closeDetails: function closeDetails() {
+      this.selectedVol = null;
+    }
+  },
+  watch: {
+    // Ferme la modale de détails si on change de page (évite de bloquer les interactions)
+    $route: function $route() {
       this.selectedVol = null;
     }
   }
@@ -33400,18 +33408,18 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'Register',
+  name: "Register",
   components: {
     RouterLink: vue_router__WEBPACK_IMPORTED_MODULE_1__.RouterLink
   },
   data: function data() {
     return {
-      name: '',
-      prenom: '',
-      email: '',
-      password: '',
-      passwordConfirmation: '',
-      recaptchaToken: '',
+      name: "",
+      prenom: "",
+      email: "",
+      password: "",
+      passwordConfirmation: "",
+      recaptchaToken: "",
       recaptchaWidgetId: null,
       captchaInterval: null,
       loading: false,
@@ -33430,9 +33438,9 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
   methods: {
     waitAndRenderCaptcha: function waitAndRenderCaptcha() {
       var _this = this;
-      var siteKey = window.RECAPTCHA_SITE_KEY || '';
+      var siteKey = window.RECAPTCHA_SITE_KEY || "";
       if (!siteKey) {
-        this.error = 'reCAPTCHA non configuré.';
+        this.error = "reCAPTCHA non configuré.";
         return;
       }
       this.captchaInterval = setInterval(function () {
@@ -33445,12 +33453,12 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               _this.recaptchaToken = token;
               _this.error = null;
             },
-            'error-callback': function errorCallback() {
-              _this.recaptchaToken = '';
-              _this.error = 'Captcha invalide.';
+            "error-callback": function errorCallback() {
+              _this.recaptchaToken = "";
+              _this.error = "Captcha invalide.";
             },
-            'expired-callback': function expiredCallback() {
-              _this.recaptchaToken = '';
+            "expired-callback": function expiredCallback() {
+              _this.recaptchaToken = "";
             }
           });
         }
@@ -33460,7 +33468,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       if (window.grecaptcha && this.recaptchaWidgetId !== null) {
         window.grecaptcha.reset(this.recaptchaWidgetId);
       }
-      this.recaptchaToken = '';
+      this.recaptchaToken = "";
     },
     submit: function submit() {
       var _this2 = this;
@@ -33473,24 +33481,24 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 _context.n = 1;
                 break;
               }
-              _this2.error = 'Merci de valider le captcha.';
+              _this2.error = "Merci de valider le captcha.";
               return _context.a(2);
             case 1:
               if (!(_this2.password !== _this2.passwordConfirmation)) {
                 _context.n = 2;
                 break;
               }
-              _this2.error = 'Les mots de passe ne correspondent pas.';
+              _this2.error = "Les mots de passe ne correspondent pas.";
               return _context.a(2);
             case 2:
               _this2.loading = true;
               _this2.error = null;
               _context.p = 3;
               _context.n = 4;
-              return axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/sanctum/csrf-cookie');
+              return axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("/sanctum/csrf-cookie");
             case 4:
               _context.n = 5;
-              return axios__WEBPACK_IMPORTED_MODULE_0__["default"].post('/api/register', {
+              return axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("/api/register", {
                 name: _this2.name,
                 prenom: _this2.prenom,
                 email: _this2.email,
@@ -33500,11 +33508,11 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             case 5:
               response = _context.v;
               _response$data = response.data, token = _response$data.token, user = _response$data.user;
-              localStorage.setItem('token', token);
-              localStorage.setItem('user', JSON.stringify(user));
-              axios__WEBPACK_IMPORTED_MODULE_0__["default"].defaults.headers.common['Authorization'] = "Bearer ".concat(token);
+              localStorage.setItem("token", token);
+              localStorage.setItem("user", JSON.stringify(user));
+              axios__WEBPACK_IMPORTED_MODULE_0__["default"].defaults.headers.common["Authorization"] = "Bearer ".concat(token);
               _this2.$router.push({
-                name: 'dashboard'
+                name: "dashboard"
               });
               _context.n = 7;
               break;
@@ -33516,7 +33524,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 firstKey = Object.keys(errors)[0];
                 _this2.error = errors[firstKey][0];
               } else {
-                _this2.error = 'Une erreur est survenue. Veuillez réessayer.';
+                _this2.error = "Une erreur est survenue. Veuillez réessayer.";
               }
               _this2.resetCaptcha();
             case 7:
@@ -41523,7 +41531,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-mask[data-v-11e02d9d] {\n    position: fixed;\n    inset: 0;\n    background: rgba(15, 23, 42, 0.45);\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    padding: 1rem;\n    z-index: 1050;\n}\n.modal-dialog[data-v-11e02d9d] {\n    width: min(960px, 100%);\n}\n.dropzone[data-v-11e02d9d] {\n    border: 2px dashed #cbd5e1;\n    border-radius: 10px;\n    padding: 12px;\n    text-align: center;\n    cursor: pointer;\n    transition: border-color 0.15s ease, background 0.15s ease;\n    min-height: 120px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.dropzone.over[data-v-11e02d9d] {\n    border-color: #6366f1;\n    background: #eef2ff;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-mask[data-v-11e02d9d] {\n    position: fixed;\n    inset: 0;\n    background: rgba(15, 23, 42, 0.45);\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    padding: 1rem;\n    z-index: 1050;\n    pointer-events: auto !important;\n}\n.modal-dialog[data-v-11e02d9d] {\n    width: min(960px, 100%);\n    pointer-events: auto !important;\n}\n.dropzone[data-v-11e02d9d] {\n    border: 2px dashed #cbd5e1;\n    border-radius: 10px;\n    padding: 12px;\n    text-align: center;\n    cursor: pointer;\n    transition: border-color 0.15s ease, background 0.15s ease;\n    min-height: 120px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.dropzone.over[data-v-11e02d9d] {\n    border-color: #6366f1;\n    background: #eef2ff;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -41547,7 +41555,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.tickets-grid[data-v-29a203ae] {\n    display: grid;\n    gap: 16px;\n    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));\n}\n.ticket-card[data-v-29a203ae] {\n    border: 1px solid #e5e7eb;\n    border-radius: 12px;\n    padding: 14px 16px;\n    background: #fff;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);\n    transition: transform 0.12s ease, box-shadow 0.12s ease;\n}\n.ticket-card[data-v-29a203ae]:hover {\n    transform: translateY(-1px);\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);\n}\n.ticket-card.mine[data-v-29a203ae] {\n    border-color: #22c55e;\n    box-shadow: 0 6px 16px rgba(34, 197, 94, 0.12);\n}\n.ticket-header[data-v-29a203ae] {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    margin-bottom: 10px;\n}\n.ticket-code[data-v-29a203ae] {\n    font-weight: 800;\n    font-size: 1.05rem;\n}\n.ticket-route[data-v-29a203ae] {\n    color: #6b7280;\n    font-size: 0.95rem;\n}\n.ticket-photo[data-v-29a203ae] {\n    margin: -14px -16px 10px -16px;\n    overflow: hidden;\n    border-radius: 12px 12px 0 0;\n}\n.ticket-photo img[data-v-29a203ae] {\n    width: 100%;\n    height: 140px;\n    -o-object-fit: cover;\n       object-fit: cover;\n    display: block;\n}\n.ticket-body[data-v-29a203ae] {\n    display: grid;\n    gap: 6px;\n}\n.ticket-line[data-v-29a203ae] {\n    display: flex;\n    justify-content: space-between;\n    font-size: 0.95rem;\n}\n.ticket-actions[data-v-29a203ae] {\n    display: flex;\n    justify-content: flex-end;\n    flex-wrap: wrap;\n    gap: 8px;\n    margin-top: 8px;\n}\n.modal-mask[data-v-29a203ae] {\n    position: fixed;\n    inset: 0;\n    background: rgba(15, 23, 42, 0.45);\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    padding: 1rem;\n    z-index: 1050;\n    pointer-events: none;\n}\n.modal-dialog[data-v-29a203ae] {\n    width: min(600px, 100%);\n    pointer-events: auto;\n}\n.modal-card[data-v-29a203ae] {\n    background: #fff;\n    border-radius: 12px;\n    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);\n    padding: 16px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.tickets-grid[data-v-29a203ae] {\n    display: grid;\n    gap: 16px;\n    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));\n}\n.ticket-card[data-v-29a203ae] {\n    border: 1px solid #e5e7eb;\n    border-radius: 12px;\n    padding: 14px 16px;\n    background: #fff;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);\n    transition: transform 0.12s ease, box-shadow 0.12s ease;\n}\n.ticket-card[data-v-29a203ae]:hover {\n    transform: translateY(-1px);\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);\n}\n.ticket-card.mine[data-v-29a203ae] {\n    border-color: #22c55e;\n    box-shadow: 0 6px 16px rgba(34, 197, 94, 0.12);\n}\n.ticket-header[data-v-29a203ae] {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    margin-bottom: 10px;\n}\n.ticket-code[data-v-29a203ae] {\n    font-weight: 800;\n    font-size: 1.05rem;\n}\n.ticket-route[data-v-29a203ae] {\n    color: #6b7280;\n    font-size: 0.95rem;\n}\n.ticket-photo[data-v-29a203ae] {\n    margin: -14px -16px 10px -16px;\n    overflow: hidden;\n    border-radius: 12px 12px 0 0;\n}\n.ticket-photo img[data-v-29a203ae] {\n    width: 100%;\n    height: 140px;\n    -o-object-fit: cover;\n       object-fit: cover;\n    display: block;\n}\n.ticket-body[data-v-29a203ae] {\n    display: grid;\n    gap: 6px;\n}\n.ticket-line[data-v-29a203ae] {\n    display: flex;\n    justify-content: space-between;\n    font-size: 0.95rem;\n}\n.ticket-actions[data-v-29a203ae] {\n    display: flex;\n    justify-content: flex-end;\n    flex-wrap: wrap;\n    gap: 8px;\n    margin-top: 8px;\n}\n.modal-mask[data-v-29a203ae] {\n    position: fixed;\n    inset: 0;\n    background: rgba(15, 23, 42, 0.45);\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    padding: 1rem;\n    z-index: 1050;\n    pointer-events: auto !important;\n}\n.modal-dialog[data-v-29a203ae] {\n    width: min(600px, 100%);\n    pointer-events: auto !important;\n}\n.modal-card[data-v-29a203ae] {\n    background: #fff;\n    border-radius: 12px;\n    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);\n    padding: 16px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -41571,7 +41579,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-mask[data-v-3b6adb30] {\n    position: fixed;\n    inset: 0;\n    background: rgba(15, 23, 42, 0.45);\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    padding: 1rem;\n    z-index: 1050;\n    pointer-events: none;\n}\n.modal-dialog[data-v-3b6adb30] {\n    width: min(520px, 100%);\n    pointer-events: auto;\n}\n.recaptcha-box[data-v-3b6adb30] {\n    min-height: 78px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-mask[data-v-3b6adb30] {\n    position: fixed;\n    inset: 0;\n    background: rgba(15, 23, 42, 0.45);\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    padding: 1rem;\n    z-index: 1050;\n    pointer-events: auto;\n}\n.modal-dialog[data-v-3b6adb30] {\n    width: min(520px, 100%);\n    pointer-events: auto;\n}\n.recaptcha-box[data-v-3b6adb30] {\n    min-height: 78px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -41595,7 +41603,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-mask[data-v-364a2fac] {\n    position: fixed;\n    inset: 0;\n    background: rgba(15, 23, 42, 0.45);\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    padding: 1rem;\n    z-index: 1050;\n    pointer-events: none;\n}\n.modal-dialog[data-v-364a2fac] {\n    width: min(620px, 100%);\n    pointer-events: auto;\n}\n.recaptcha-box[data-v-364a2fac] {\n    min-height: 78px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-mask[data-v-364a2fac] {\n    position: fixed;\n    inset: 0;\n    background: rgba(15, 23, 42, 0.45);\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    padding: 1rem;\n    z-index: 1050;\n\n    pointer-events: auto;\n}\n.modal-dialog[data-v-364a2fac] {\n    width: min(620px, 100%);\n    pointer-events: auto;\n}\n.recaptcha-box[data-v-364a2fac] {\n    min-height: 78px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

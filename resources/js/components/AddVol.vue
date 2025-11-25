@@ -145,6 +145,8 @@ export default {
         if (this.isEdit) {
             this.fetchVol()
         }
+        // Assure que le focus clavier reste possible même si un overlay précédent est resté affiché
+        document.body.classList.remove('modal-open-block')
     },
     methods: {
         setAuthHeader() {
@@ -270,9 +272,11 @@ export default {
     align-items: center;
     padding: 1rem;
     z-index: 1050;
+    pointer-events: auto !important;
 }
 .modal-dialog {
     width: min(960px, 100%);
+    pointer-events: auto !important;
 }
 .dropzone {
     border: 2px dashed #cbd5e1;
