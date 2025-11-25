@@ -27,12 +27,8 @@
                     billets” (seulement vos billets).
                 </li>
                 <li>
-                    Tester l’autocomplétion via la page “Recherche”
-                    (origine/destination/code).
-                </li>
-                <li>
-                    Vérifier l’API via Postman : utiliser le token Sanctum
-                    (login) pour POST/PUT/DELETE sur vols/avions.
+                    Consulter la liste des vols, avec filtres (date, prix,
+                    destination).
                 </li>
             </ol>
 
