@@ -33,6 +33,13 @@
             </ol>
 
             <h2 class="h5 mt-4">Diagramme BD</h2>
+            <div class="diagram-wrapper mt-3">
+                <img
+                    src="/images/diagramme-bd.svg"
+                    alt="Diagramme de la base de donn\u00e9es Gestion Airline"
+                    class="img-fluid border rounded"
+                />
+            </div>
         </div>
     </div>
 </template>

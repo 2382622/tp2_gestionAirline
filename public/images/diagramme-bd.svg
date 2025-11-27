@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+<title id="title">Diagramme de la base de donnees Gestion Airline</title>
+<desc id="desc">Tables et colonnes principales de l'application Gestion Airline.</desc>
+<defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#f8fafc" />
+        <stop offset="100%" stop-color="#eef2ff" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#94a3b8" flood-opacity="0.35" />
+    </filter>
+    <style>
+        text { font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; }
+        .title { font-size: 16px; font-weight: 700; fill: #0f172a; }
+        .field { font-size: 13px; fill: #334155; }
+        .table-rect { fill: #fff; stroke: #cbd5e1; stroke-width: 1.1; filter: url(#shadow); }
+        .bg-rect { fill: url(#bg); }
+    </style>
+</defs>
+<rect class="bg-rect" x="0" y="0" width="1200" height="900" />
+
+<g transform="translate(60 40)">
+    <rect class="table-rect" width="240" height="140" rx="10" />
+    <text class="title" x="12" y="26">password_resets</text>
+    <text class="field" x="12" y="54">email : varchar(255)</text>
+    <text class="field" x="12" y="74">token : varchar(255)</text>
+    <text class="field" x="12" y="94">created_at : timestamp</text>
+</g>
+
+<g transform="translate(420 40)">
+    <rect class="table-rect" width="300" height="200" rx="10" />
+    <text class="title" x="12" y="26">personal_access_tokens</text>
+    <text class="field" x="12" y="54">id : bigint(20) unsigned</text>
+    <text class="field" x="12" y="74">tokenable_type : varchar(255)</text>
+    <text class="field" x="12" y="94">tokenable_id : bigint(20) unsigned</text>
+    <text class="field" x="12" y="114">name : varchar(255)</text>
+    <text class="field" x="12" y="134">token : varchar(64)</text>
+    <text class="field" x="12" y="154">abilities : text</text>
+    <text class="field" x="12" y="174">last_used_at : timestamp</text>
+    <text class="field" x="12" y="194">created_at / updated_at : timestamp</text>
+</g>
+
+<g transform="translate(810 40)">
+    <rect class="table-rect" width="280" height="220" rx="10" />
+    <text class="title" x="12" y="26">failed_jobs</text>
+    <text class="field" x="12" y="54">id : bigint(20) unsigned</text>
+    <text class="field" x="12" y="74">uuid : varchar(255)</text>
+    <text class="field" x="12" y="94">connection : text</text>
+    <text class="field" x="12" y="114">queue : text</text>
+    <text class="field" x="12" y="134">payload : longtext</text>
+    <text class="field" x="12" y="154">exception : longtext</text>
+    <text class="field" x="12" y="174">failed_at : timestamp</text>
+    <text class="field" x="12" y="194">created_at / updated_at : timestamp</text>
+</g>
+
+<g transform="translate(60 220)">
+    <rect class="table-rect" width="300" height="230" rx="10" />
+    <text class="title" x="12" y="26">users</text>
+    <text class="field" x="12" y="54">id : bigint(20) unsigned</text>
+    <text class="field" x="12" y="74">name : varchar(150)</text>
+    <text class="field" x="12" y="94">prenom : varchar(150)</text>
+    <text class="field" x="12" y="114">email : varchar(255)</text>
+    <text class="field" x="12" y="134">email_verified_at : timestamp</text>
+    <text class="field" x="12" y="154">password : varchar(255)</text>
+    <text class="field" x="12" y="174">role : varchar(20)</text>
+    <text class="field" x="12" y="194">remember_token : varchar(100)</text>
+    <text class="field" x="12" y="214">created_at / updated_at : timestamp</text>
+</g>
+
+<g transform="translate(420 250)">
+    <rect class="table-rect" width="240" height="130" rx="10" />
+    <text class="title" x="12" y="26">migrations</text>
+    <text class="field" x="12" y="54">id : int(10) unsigned</text>
+    <text class="field" x="12" y="74">migration : varchar(255)</text>
+    <text class="field" x="12" y="94">batch : int(11)</text>
+</g>
+
+<g transform="translate(60 500)">
+    <rect class="table-rect" width="260" height="150" rx="10" />
+    <text class="title" x="12" y="26">avions</text>
+    <text class="field" x="12" y="54">id : bigint(20) unsigned</text>
+    <text class="field" x="12" y="74">capacite : int(11)</text>
+    <text class="field" x="12" y="94">modele : varchar(100)</text>
+    <text class="field" x="12" y="114">created_at / updated_at : timestamp</text>
+</g>
+
+<g transform="translate(420 430)">
+    <rect class="table-rect" width="290" height="260" rx="10" />
+    <text class="title" x="12" y="26">vols</text>
+    <text class="field" x="12" y="54">id : varchar(255)</text>
+    <text class="field" x="12" y="74">date_depart : datetime</text>
+    <text class="field" x="12" y="94">date_arrive : datetime</text>
+    <text class="field" x="12" y="114">origine : varchar(255)</text>
+    <text class="field" x="12" y="134">destination : varchar(255)</text>
+    <text class="field" x="12" y="154">prix : decimal(10,2) unsigned</text>
+    <text class="field" x="12" y="174">etat : tinyint(1)</text>
+    <text class="field" x="12" y="194">created_at / updated_at : timestamp</text>
+    <text class="field" x="12" y="214">avion_id : bigint(20) unsigned</text>
+    <text class="field" x="12" y="234">photo : varchar(255)</text>
+</g>
+
+<g transform="translate(780 520)">
+    <rect class="table-rect" width="260" height="170" rx="10" />
+    <text class="title" x="12" y="26">tickets</text>
+    <text class="field" x="12" y="54">id : bigint(20) unsigned</text>
+    <text class="field" x="12" y="74">created_at / updated_at : timestamp</text>
+    <text class="field" x="12" y="94">vol_id : varchar(255)</text>
+    <text class="field" x="12" y="114">user_id : bigint(20) unsigned</text>
+    <text class="field" x="12" y="134">quantite : int(10) unsigned</text>
+</g>
+</svg>
