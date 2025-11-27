@@ -96,6 +96,15 @@ export default {
         async fetchRandomVols() {
             this.loading = true;
             this.error = null;
+
+            try {
+                const response = await axios.get("/api/vols-home");
+                this.vols = response.data;
+            } catch (e) {
+                this.error = "Impossible de charger les vols.";
+            } finally {
+                this.loading = false;
+            }
         },
         formatDate(value) {
             if (!value) {
