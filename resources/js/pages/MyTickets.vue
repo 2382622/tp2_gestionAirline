@@ -1,7 +1,7 @@
 <template>
-    <div class="card shadow-sm">
+    <div class="card shadow-sm" :dir="direction" :lang="lang">
         <div class="card-body">
-            <h1 class="h4 mb-3">Mes billets</h1>
+            <h1 class="h4 mb-3">{{ t('tickets.title') }}</h1>
 
             <div v-if="loading" class="text-center my-3">
                 <div class="spinner-border text-primary" role="status" />
@@ -13,18 +13,18 @@
 
             <div v-else>
                 <p v-if="tickets.length === 0" class="text-muted mb-0">
-                    Vous n’avez encore aucun billet
+                    {{ t('tickets.empty') }}
                 </p>
 
                 <div v-else class="table-responsive">
                     <table class="table table-striped align-middle mb-0">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Vol</th>
-                                <th>Utilisateur</th>
-                                <th>Quantité</th>
-                                <th v-if="isAdmin" class="text-end">Actions</th>
+                                <th>{{ t('tickets.columns.id') }}</th>
+                                <th>{{ t('tickets.columns.flight') }}</th>
+                                <th>{{ t('tickets.columns.user') }}</th>
+                                <th>{{ t('tickets.columns.quantity') }}</th>
+                                <th v-if="isAdmin" class="text-end">{{ t('tickets.columns.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,10 +35,10 @@
                                 <td>{{ ticket.quantite }}</td>
                                 <td v-if="isAdmin" class="text-end">
                                     <button class="btn btn-sm btn-outline-warning me-1" @click="editTicket(ticket)">
-                                        Modifier
+                                        {{ t('listVols.modifier') }}
                                     </button>
                                     <button class="btn btn-sm btn-outline-danger" @click="deleteTicket(ticket)">
-                                        Supprimer
+                                        {{ t('listVols.supprimer') }}
                                     </button>
                                 </td>
                             </tr>
@@ -52,9 +52,14 @@
 
 <script>
 import axios from 'axios'
+import { useI18n } from '../i18n'
 
 export default {
     name: 'MyTickets',
+    setup() {
+        const { t, lang, direction } = useI18n()
+        return { t, lang, direction }
+    },
     data() {
         return {
             tickets: [],
@@ -85,16 +90,16 @@ export default {
                 this.tickets = response.data
             } catch (e) {
                 if (e.response && e.response.status === 401) {
-                    this.error = 'Accès refusé. Veuillez vous reconnecter pour voir vos billets.'
+                    this.error = this.t('tickets.errors.access')
                 } else {
-                    this.error = 'Impossible de charger les billets.'
+                    this.error = this.t('tickets.errors.load')
                 }
             } finally {
                 this.loading = false
             }
         },
         async editTicket(ticket) {
-            const quantite = window.prompt('Quantité', ticket.quantite)
+            const quantite = window.prompt(this.t('tickets.editPrompt'), ticket.quantite)
             if (quantite === null || quantite === '') return
 
             const token = localStorage.getItem('token')
@@ -106,11 +111,11 @@ export default {
                 await axios.put(`/api/tickets/${ticket.id}`, { quantite: Number(quantite) })
                 ticket.quantite = Number(quantite)
             } catch (e) {
-                alert('Impossible de modifier le billet.')
+                alert(this.t('tickets.editError'))
             }
         },
         async deleteTicket(ticket) {
-            if (!window.confirm('Supprimer ce billet ?')) return
+            if (!window.confirm(this.t('tickets.deleteConfirm'))) return
 
             const token = localStorage.getItem('token')
             if (token) {
@@ -121,7 +126,7 @@ export default {
                 await axios.delete(`/api/tickets/${ticket.id}`)
                 this.tickets = this.tickets.filter((t) => t.id !== ticket.id)
             } catch (e) {
-                alert('Impossible de supprimer le billet.')
+                alert(this.t('tickets.deleteError'))
             }
         },
     },
@@ -132,4 +137,3 @@ export default {
     },
 }
 </script>
-

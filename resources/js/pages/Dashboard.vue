@@ -1,17 +1,14 @@
 <template>
-    <div class="row">
+    <div class="row" :dir="direction" :lang="lang">
         <div class="col-md-8 mb-4">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h1 class="h4 mb-3">Tableau de bord</h1>
+                    <h1 class="h4 mb-3">{{ t('dashboard.title') }}</h1>
                     <p class="mb-1">
-                        Bonjour
-                        <strong>{{ fullName }}</strong>
-                        !
+                        {{ t('dashboard.hello', { name: fullName || '...' }) }}
                     </p>
-                    <p class="text-muted mb-0">
-                        Vous êtes connecté avec l’adresse
-                        <strong>{{ user?.email }}</strong>.
+                    <p class="text-muted mb-0" v-if="user">
+                        {{ t('dashboard.connectedAs', { email: user.email }) }}
                     </p>
                 </div>
             </div>
@@ -20,16 +17,16 @@
         <div class="col-md-4">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h2 class="h5 mb-3">Actions rapides</h2>
+                    <h2 class="h5 mb-3">{{ t('dashboard.quickActions') }}</h2>
                     <ul class="list-unstyled mb-0">
                         <li class="mb-2">
                             <RouterLink class="btn btn-outline-primary w-100" to="/vols">
-                                Voir tous les vols
+                                {{ t('dashboard.viewFlights') }}
                             </RouterLink>
                         </li>
                         <li class="mb-2" v-if="isAdmin">
                             <RouterLink class="btn btn-outline-success w-100" to="/vols/create">
-                                Ajouter un vol
+                                {{ t('dashboard.addFlight') }}
                             </RouterLink>
                         </li>
                     </ul>
@@ -41,10 +38,15 @@
 
 <script>
 import { RouterLink } from 'vue-router'
+import { useI18n } from '../i18n'
 
 export default {
     name: 'Dashboard',
     components: { RouterLink },
+    setup() {
+        const { t, lang, direction } = useI18n()
+        return { t, lang, direction }
+    },
     data() {
         return {
             user: null,

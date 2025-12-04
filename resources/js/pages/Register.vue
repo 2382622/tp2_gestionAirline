@@ -1,17 +1,11 @@
 <template>
-    <div class="modal-mask">
+    <div class="modal-mask" :dir="direction" :lang="lang">
         <div class="modal-dialog">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <div
-                        class="d-flex justify-content-between align-items-start mb-3"
-                    >
-                        <h1 class="h4 mb-0">Inscription</h1>
-                        <RouterLink
-                            class="btn-close"
-                            to="/"
-                            aria-label="Fermer"
-                        ></RouterLink>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h1 class="h4 mb-0">{{ t('register.title') }}</h1>
+                        <RouterLink class="btn-close" to="/" :aria-label="t('login.close')"></RouterLink>
                     </div>
 
                     <div v-if="error" class="alert alert-danger">
@@ -21,9 +15,7 @@
                     <form @submit.prevent="submit">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label" for="register-name"
-                                    >Nom</label
-                                >
+                                <label class="form-label" for="register-name">{{ t('register.name') }}</label>
                                 <input
                                     id="register-name"
                                     v-model="name"
@@ -33,9 +25,7 @@
                                 />
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label" for="register-prenom"
-                                    >Prénom</label
-                                >
+                                <label class="form-label" for="register-prenom">{{ t('register.firstname') }}</label>
                                 <input
                                     id="register-prenom"
                                     v-model="prenom"
@@ -47,9 +37,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label" for="register-email"
-                                >Courriel</label
-                            >
+                            <label class="form-label" for="register-email">{{ t('register.email') }}</label>
                             <input
                                 id="register-email"
                                 v-model="email"
@@ -61,11 +49,7 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label
-                                    class="form-label"
-                                    for="register-password"
-                                    >Mot de passe</label
-                                >
+                                <label class="form-label" for="register-password">{{ t('register.password') }}</label>
                                 <input
                                     id="register-password"
                                     v-model="password"
@@ -75,11 +59,7 @@
                                 />
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label
-                                    class="form-label"
-                                    for="register-password-confirm"
-                                    >Confirmation</label
-                                >
+                                <label class="form-label" for="register-password-confirm">{{ t('register.confirmation') }}</label>
                                 <input
                                     id="register-password-confirm"
                                     v-model="passwordConfirmation"
@@ -91,7 +71,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">reCAPTCHA</label>
+                            <label class="form-label">{{ t('register.captcha') }}</label>
                             <div
                                 ref="recaptchaContainer"
                                 class="recaptcha-box"
@@ -108,12 +88,12 @@
                                     v-if="loading"
                                     class="spinner-border spinner-border-sm me-2"
                                 />
-                                Créer mon compte
+                                {{ t('register.submit') }}
                             </button>
 
-                            <RouterLink class="btn btn-link" to="/login"
-                                >Déjà inscrit ? Se connecter</RouterLink
-                            >
+                            <RouterLink class="btn btn-link" to="/login">
+                                {{ t('register.already') }}
+                            </RouterLink>
                         </div>
                     </form>
                 </div>
@@ -123,41 +103,46 @@
 </template>
 
 <script>
-import axios from "axios";
-import { RouterLink } from "vue-router";
+import axios from 'axios'
+import { RouterLink } from 'vue-router'
+import { useI18n } from '../i18n'
 
 export default {
-    name: "Register",
+    name: 'Register',
     components: { RouterLink },
+    setup() {
+        const { t, lang, direction } = useI18n()
+        return { t, lang, direction }
+    },
     data() {
         return {
-            name: "",
-            prenom: "",
-            email: "",
-            password: "",
-            passwordConfirmation: "",
-            recaptchaToken: "",
+            name: '',
+            prenom: '',
+            email: '',
+            password: '',
+            passwordConfirmation: '',
+            recaptchaToken: '',
             recaptchaWidgetId: null,
             captchaInterval: null,
             loading: false,
             error: null,
-        };
+        }
     },
     mounted() {
-        this.waitAndRenderCaptcha();
+        this.waitAndRenderCaptcha()
     },
     beforeUnmount() {
         if (this.captchaInterval) {
-            clearInterval(this.captchaInterval);
+            clearInterval(this.captchaInterval)
         }
-        this.resetCaptcha();
+        this.resetCaptcha()
     },
     methods: {
         waitAndRenderCaptcha() {
-            const siteKey = window.RECAPTCHA_SITE_KEY || "";
+            const siteKey = window.RECAPTCHA_SITE_KEY || ''
             if (!siteKey) {
-                this.error = "reCAPTCHA non configuré.";
-                return;
+                this.error = this.t('login.captchaNotConfigured')
+                return
             }
 
             this.captchaInterval = setInterval(() => {
@@ -166,82 +151,80 @@ export default {
                     window.grecaptcha.render &&
                     this.$refs.recaptchaContainer
                 ) {
-                    clearInterval(this.captchaInterval);
-                    this.captchaInterval = null;
+                    clearInterval(this.captchaInterval)
+                    this.captchaInterval = null
                     this.recaptchaWidgetId = window.grecaptcha.render(
                         this.$refs.recaptchaContainer,
                         {
                             sitekey: siteKey,
                             callback: (token) => {
-                                this.recaptchaToken = token;
-                                this.error = null;
+                                this.recaptchaToken = token
+                                this.error = null
                             },
-                            "error-callback": () => {
-                                this.recaptchaToken = "";
-                                this.error = "Captcha invalide.";
+                            'error-callback': () => {
+                                this.recaptchaToken = ''
+                                this.error = this.t('login.captchaInvalid')
                             },
-                            "expired-callback": () => {
-                                this.recaptchaToken = "";
+                            'expired-callback': () => {
+                                this.recaptchaToken = ''
                             },
                         }
-                    );
+                    )
                 }
-            }, 300);
+            }, 300)
         },
         resetCaptcha() {
             if (window.grecaptcha && this.recaptchaWidgetId !== null) {
-                window.grecaptcha.reset(this.recaptchaWidgetId);
+                window.grecaptcha.reset(this.recaptchaWidgetId)
             }
-            this.recaptchaToken = "";
+            this.recaptchaToken = ''
         },
         async submit() {
             if (!this.recaptchaToken) {
-                this.error = "Merci de valider le captcha.";
-                return;
+                this.error = this.t('register.captchaMissing')
+                return
             }
 
             if (this.password !== this.passwordConfirmation) {
-                this.error = "Les mots de passe ne correspondent pas.";
-                return;
+                this.error = this.t('register.passwordMismatch')
+                return
             }
 
-            this.loading = true;
-            this.error = null;
+            this.loading = true
+            this.error = null
 
             try {
-                await axios.get("/sanctum/csrf-cookie");
-                const response = await axios.post("/api/register", {
+                await axios.get('/sanctum/csrf-cookie')
+                const response = await axios.post('/api/register', {
                     name: this.name,
                     prenom: this.prenom,
                     email: this.email,
                     password: this.password,
                     recaptcha_token: this.recaptchaToken,
-                });
+                })
 
-                const { token, user } = response.data;
+                const { token, user } = response.data
 
-                localStorage.setItem("token", token);
-                localStorage.setItem("user", JSON.stringify(user));
-                axios.defaults.headers.common[
-                    "Authorization"
-                ] = `Bearer ${token}`;
+                localStorage.setItem('token', token)
+                localStorage.setItem('user', JSON.stringify(user))
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
-                this.$router.push({ name: "dashboard" });
+                this.$router.push({ name: 'dashboard' })
             } catch (e) {
                 if (e.response && e.response.data && e.response.data.errors) {
-                    const errors = e.response.data.errors;
-                    const firstKey = Object.keys(errors)[0];
-                    this.error = errors[firstKey][0];
+                    const errors = e.response.data.errors
+                    const firstKey = Object.keys(errors)[0]
+                    this.error = errors[firstKey][0]
                 } else {
-                    this.error = "Une erreur est survenue. Veuillez réessayer.";
+                    this.error = this.t('register.error')
                 }
-                this.resetCaptcha();
+                this.resetCaptcha()
             } finally {
-                this.loading = false;
+                this.loading = false
             }
         },
     },
-};
+}
 </script>
 
 <style scoped>

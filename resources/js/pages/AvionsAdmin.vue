@@ -1,8 +1,8 @@
 <template>
-    <div class="card shadow-sm">
+    <div class="card shadow-sm" :dir="direction" :lang="lang">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1 class="h4 m-0">Liste des avions</h1>
+                <h1 class="h4 m-0">{{ t('avions.title') }}</h1>
             </div>
 
             <div v-if="success" class="alert alert-success py-2">
@@ -18,10 +18,10 @@
                 <table class="table table-striped align-middle mb-0">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Modèle</th>
-                            <th>Capacité</th>
-                            <th class="text-end">Actions</th>
+                            <th>{{ t('avions.table.id') }}</th>
+                            <th>{{ t('avions.table.model') }}</th>
+                            <th>{{ t('avions.table.capacity') }}</th>
+                            <th class="text-end">{{ t('avions.table.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,13 +54,13 @@
                                         class="btn btn-sm btn-primary me-2"
                                         @click="saveEdit(avion)"
                                     >
-                                        Enregistrer
+                                        {{ t('avions.save') }}
                                     </button>
                                     <button
                                         class="btn btn-sm btn-outline-secondary"
                                         @click="cancelEdit"
                                     >
-                                        Annuler
+                                        {{ t('avions.cancel') }}
                                     </button>
                                 </template>
                                 <template v-else>
@@ -68,20 +68,20 @@
                                         class="btn btn-sm btn-outline-primary me-2"
                                         @click="startEdit(avion)"
                                     >
-                                        Modifier
+                                        {{ t('avions.edit') }}
                                     </button>
                                     <button
                                         class="btn btn-sm btn-outline-danger"
                                         @click="deleteAvion(avion)"
                                     >
-                                        Supprimer
+                                        {{ t('avions.delete') }}
                                     </button>
                                 </template>
                             </td>
                         </tr>
                         <tr v-if="!avions.length && !loading">
                             <td colspan="4" class="text-center text-muted">
-                                Aucun avion trouvé.
+                                {{ t('avions.empty') }}
                             </td>
                         </tr>
                     </tbody>
@@ -92,10 +92,15 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios'
+import { useI18n } from '../i18n'
 
 export default {
-    name: "AvionsAdmin",
+    name: 'AvionsAdmin',
+    setup() {
+        const { t, lang, direction } = useI18n()
+        return { t, lang, direction }
+    },
     data() {
         return {
             avions: [],
@@ -104,76 +109,85 @@ export default {
             success: null,
             editingId: null,
             form: {
-                modele: "",
+                modele: '',
                 capacite: 0,
             },
-        };
+        }
     },
     created() {
-        this.setAuthHeader();
-        this.fetchAvions();
+        this.setAuthHeader()
+        this.fetchAvions()
     },
     methods: {
         setAuthHeader() {
-            const token = localStorage.getItem("token");
+            const token = localStorage.getItem('token')
             if (token) {
-                axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+                axios.defaults.headers.common.Authorization = `Bearer ${token}`
             }
         },
         async fetchAvions() {
-            this.loading = true;
-            this.error = null;
-            this.success = null;
+            this.loading = true
+            this.error = null
+            this.success = null
+
+            try {
+                const { data } = await axios.get('/api/avions')
+                this.avions = data
+            } catch (e) {
+                this.error = this.t('avions.errorLoad')
+            } finally {
+                this.loading = false
+            }
         },
         startEdit(avion) {
-            this.editingId = avion.id;
+            this.editingId = avion.id
             this.form = {
                 modele: avion.modele,
                 capacite: avion.capacite,
-            };
-            this.success = null;
-            this.error = null;
+            }
+            this.success = null
+            this.error = null
         },
         cancelEdit() {
-            this.editingId = null;
-            this.form = { modele: "", capacite: 0 };
+            this.editingId = null
+            this.form = { modele: '', capacite: 0 }
         },
         async deleteAvion(avion) {
-            if (!window.confirm("Supprimer cet avion ?")) return;
+            if (!window.confirm(this.t('avions.delete'))) return
 
-            this.setAuthHeader();
-            this.error = null;
-            this.success = null;
+            this.setAuthHeader()
+            this.error = null
+            this.success = null
 
             try {
-                await axios.delete(`/api/avions/${avion.id}`);
-                this.avions = this.avions.filter((a) => a.id !== avion.id);
-                this.success = "Avion supprimé.";
+                await axios.delete(`/api/avions/${avion.id}`)
+                this.avions = this.avions.filter((a) => a.id !== avion.id)
+                this.success = this.t('avions.successDelete')
             } catch (e) {
-                this.error = "Impossible de supprimer cet avion.";
+                this.error = this.t('avions.errorDelete')
             }
         },
         async saveEdit(avion) {
             if (!this.form.modele || !this.form.capacite) {
-                this.error = "Modele et capacité sont requis.";
-                return;
+                this.error = this.t('avions.errorRequired')
+                return
             }
 
-            this.setAuthHeader();
-            this.error = null;
+            this.setAuthHeader()
+            this.error = null
 
             try {
                 const response = await axios.put(`/api/avions/${avion.id}`, {
                     modele: this.form.modele,
                     capacite: Number(this.form.capacite),
-                });
-                Object.assign(avion, response.data);
-                this.success = "Avion mis à jour.";
-                this.cancelEdit();
+                })
+                Object.assign(avion, response.data)
+                this.success = this.t('avions.successUpdate')
+                this.cancelEdit()
             } catch (e) {
-                this.error = "Impossible de mettre à jour cet avion.";
+                this.error = this.t('avions.errorUpdate')
             }
         },
     },
-};
+}
 </script>

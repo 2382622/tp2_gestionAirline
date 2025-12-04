@@ -1,12 +1,12 @@
 <template>
-    <div>
+    <div :dir="direction" :lang="lang">
         <div class="card shadow-sm">
             <div class="card-body">
                 <header class="d-flex justify-content-between align-items-center mb-3">
                     <div>
-                        <h1 class="h4 mb-1">Vols disponibles</h1>
+                        <h1 class="h4 mb-1">{{ t('listVols.title') }}</h1>
                     </div>
-                    <RouterLink v-if="isAdmin" class="btn btn-success" to="/vols/create">Ajouter un vol</RouterLink>
+                    <RouterLink v-if="isAdmin" class="btn btn-success" to="/vols/create">{{ t('listVols.add') }}</RouterLink>
                 </header>
 
                 <div v-if="loading" class="text-center py-4">
@@ -18,53 +18,53 @@
                 </div>
 
                 <div v-else>
-                    <div v-if="vols.length === 0" class="alert alert-info mb-0">Aucun vol trouvé.</div>
+                    <div v-if="vols.length === 0" class="alert alert-info mb-0">{{ t('listVols.empty') }}</div>
 
                     <div v-else class="tickets-grid">
                         <div v-for="vol in vols" :key="vol.id" class="ticket-card" :class="{ mine: vol.has_ticket }">
                             <div v-if="vol.photo_url" class="ticket-photo">
-                                <img :src="vol.photo_url" :alt="`Photo du vol ${vol.id}`" />
+                                <img :src="vol.photo_url" :alt="t('listVols.photoAlt', { id: vol.id })" />
                             </div>
                             <div class="ticket-header">
                                 <div>
                                     <div class="ticket-code">{{ vol.id }}</div>
                                     <div class="ticket-route">{{ vol.origine }} → {{ vol.destination }}</div>
                                 </div>
-                                <span v-if="vol.has_ticket" class="badge bg-success">Mes billets</span>
+                                <span v-if="vol.has_ticket" class="badge bg-success">{{ t('listVols.mine') }}</span>
                             </div>
 
                             <div class="ticket-body">
                                 <div class="ticket-line">
-                                    <small class="text-muted">Départ</small>
+                                    <small class="text-muted">{{ t('listVols.depart') }}</small>
                                     <span>{{ formatDate(vol.date_depart) }}</span>
                                 </div>
                                 <div class="ticket-line">
-                                    <small class="text-muted">Arrivée</small>
+                                    <small class="text-muted">{{ t('listVols.arrivee') }}</small>
                                     <span>{{ formatDate(vol.date_arrive) }}</span>
                                 </div>
                                 <div class="ticket-line">
-                                    <small class="text-muted">Prix</small>
+                                    <small class="text-muted">{{ t('listVols.price') }}</small>
                                     <strong>{{ vol.prix }} $</strong>
                                 </div>
                                 <div class="ticket-line">
-                                    <small class="text-muted">Avion</small>
+                                    <small class="text-muted">{{ t('listVols.plane') }}</small>
                                     <span>
                                         <template v-if="vol.avion">
                                             {{ vol.avion.modele }} ({{ vol.avion.capacite }} pl.)
                                         </template>
-                                        <template v-else>—</template>
+                                        <template v-else>{{ t('listVols.noPlane') }}</template>
                                     </span>
                                 </div>
                                 <div class="ticket-actions">
                                     <button class="btn btn-sm btn-outline-secondary me-2" @click="openDetails(vol)">
-                                        Détails
+                                        {{ t('listVols.details') }}
                                     </button>
                                     <div v-if="isAdmin" class="d-inline-flex gap-2">
                                         <RouterLink class="btn btn-sm btn-outline-warning" :to="`/vols/${vol.id}/edit`">
-                                            Modifier
+                                            {{ t('listVols.modifier') }}
                                         </RouterLink>
                                         <button class="btn btn-sm btn-outline-danger" @click="deleteVol(vol.id)">
-                                            Supprimer
+                                            {{ t('listVols.supprimer') }}
                                         </button>
                                     </div>
                                 </div>
@@ -79,29 +79,27 @@
             <div class="modal-dialog">
                 <div class="modal-card">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h5 class="mb-0">Vol {{ selectedVol.id }}</h5>
+                        <h5 class="mb-0">{{ t('listVols.detailsTitle', { id: selectedVol.id }) }}</h5>
                         <button class="btn-close" @click="closeDetails"></button>
                     </div>
                     <div v-if="selectedVol.photo_url" class="mb-3">
                         <img :src="selectedVol.photo_url" class="img-fluid rounded" :alt="selectedVol.id" />
                     </div>
-                    <p><strong>Origine:</strong> {{ selectedVol.origine }}</p>
-                    <p><strong>Destination:</strong> {{ selectedVol.destination }}</p>
-                    <p><strong>Départ:</strong> {{ formatDate(selectedVol.date_depart) }}</p>
-                    <p><strong>Arrivée:</strong> {{ formatDate(selectedVol.date_arrive) }}</p>
-                    <p><strong>Prix:</strong> {{ selectedVol.prix }} $</p>
+                    <p><strong>{{ t('listVols.depart') }}:</strong> {{ formatDate(selectedVol.date_depart) }}</p>
+                    <p><strong>{{ t('listVols.arrivee') }}:</strong> {{ formatDate(selectedVol.date_arrive) }}</p>
+                    <p><strong>{{ t('listVols.price') }}:</strong> {{ selectedVol.prix }} $</p>
                     <p>
-                        <strong>Avion:</strong>
+                        <strong>{{ t('listVols.plane') }}:</strong>
                         <span v-if="selectedVol.avion">
                             {{ selectedVol.avion.modele }} ({{ selectedVol.avion.capacite }} pl.)
                         </span>
-                        <span v-else>—</span>
+                        <span v-else>{{ t('listVols.noPlane') }}</span>
                     </p>
                     <div class="d-flex justify-content-end gap-2">
                         <RouterLink v-if="isAdmin" class="btn btn-sm btn-outline-warning" :to="`/vols/${selectedVol.id}/edit`">
-                            Modifier
+                            {{ t('listVols.modifier') }}
                         </RouterLink>
-                        <button class="btn btn-sm btn-outline-secondary" @click="closeDetails">Fermer</button>
+                        <button class="btn btn-sm btn-outline-secondary" @click="closeDetails">{{ t('listVols.fermer') }}</button>
                     </div>
                 </div>
             </div>
@@ -112,10 +110,15 @@
 <script>
 import axios from 'axios'
 import { RouterLink } from 'vue-router'
+import { useI18n } from '../i18n'
 
 export default {
     name: 'ListVols',
     components: { RouterLink },
+    setup() {
+        const { t, lang, direction } = useI18n()
+        return { t, lang, direction }
+    },
     data() {
         return {
             vols: [],
@@ -148,7 +151,7 @@ export default {
                 const response = await axios.get('/api/vols')
                 this.vols = response.data
             } catch (e) {
-                this.error = 'Impossible de charger les vols.'
+                this.error = this.t('listVols.loadError')
             } finally {
                 this.loading = false
             }
@@ -158,7 +161,7 @@ export default {
             return new Date(value).toLocaleString()
         },
         async deleteVol(id) {
-            if (!window.confirm('Supprimer ce vol ?')) return
+            if (!window.confirm(this.t('listVols.deleteConfirm'))) return
 
             const token = localStorage.getItem('token')
             if (token) {
@@ -169,7 +172,7 @@ export default {
                 await axios.delete(`/api/vols/${id}`)
                 this.vols = this.vols.filter((v) => v.id !== id)
             } catch (e) {
-                alert('Impossible de supprimer le vol.')
+                alert(this.t('listVols.deleteError'))
             }
         },
         openDetails(vol) {
@@ -180,7 +183,7 @@ export default {
         },
     },
     watch: {
-        // Ferme la modale de détails si on change de page (évite de bloquer les interactions)
+        // Close details modal if route changes
         $route() {
             this.selectedVol = null
         },

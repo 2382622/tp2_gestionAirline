@@ -1,11 +1,8 @@
 <template>
-    <div class="row">
+    <div class="row" :dir="direction" :lang="lang">
         <div class="col-md-7 mb-4">
-            <h1 class="mb-3">Bienvenue sur Gestion Airline</h1>
-            <p>
-                Connectez-vous pour consulter la liste complète des vols, créer
-                un nouveau vol ou gérer vos tickets.
-            </p>
+            <h1 class="mb-3">{{ t('home.title') }}</h1>
+            <p>{{ t('home.intro') }}</p>
 
             <div class="mt-4">
                 <RouterLink
@@ -13,14 +10,14 @@
                     class="btn btn-primary me-2"
                     to="/login"
                 >
-                    Se connecter
+                    {{ t('home.ctaLogin') }}
                 </RouterLink>
                 <RouterLink
                     v-if="!isAuthenticated"
                     class="btn btn-outline-secondary"
                     to="/register"
                 >
-                    Créer un compte
+                    {{ t('home.ctaRegister') }}
                 </RouterLink>
             </div>
         </div>
@@ -29,7 +26,7 @@
             <div class="card shadow-sm h-100">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title mb-3">
-                        Vols en provenance de Montréal
+                        {{ t('home.cardTitle') }}
                     </h5>
 
                     <div v-if="loading" class="text-center my-3">
@@ -45,8 +42,7 @@
 
                     <ul v-else class="list-unstyled mb-0">
                         <li v-if="vols.length === 0" class="text-muted">
-                            Aucun vol trouvé au départ ou à destination de
-                            Montréal.
+                            {{ t('home.empty') }}
                         </li>
                         <li
                             v-for="vol in vols"
@@ -59,8 +55,8 @@
                             {{ vol.origine }} → {{ vol.destination }}
                             <br />
                             <small class="text-muted">
-                                Départ : {{ formatDate(vol.date_depart) }} |
-                                Prix : {{ vol.prix }} $
+                                {{ t('home.depart') }} : {{ formatDate(vol.date_depart) }} |
+                                {{ t('home.price') }} : {{ vol.prix }} $
                             </small>
                         </li>
                     </ul>
@@ -71,47 +67,52 @@
 </template>
 
 <script>
-import axios from "axios";
-import { RouterLink } from "vue-router";
+import axios from 'axios'
+import { RouterLink } from 'vue-router'
+import { useI18n } from '../i18n'
 
 export default {
-    name: "Home",
+    name: 'Home',
     components: { RouterLink },
+    setup() {
+        const { t, lang, direction } = useI18n()
+        return { t, lang, direction }
+    },
     data() {
         return {
             vols: [],
             loading: false,
             error: null,
-        };
+        }
     },
     computed: {
         isAuthenticated() {
-            return !!localStorage.getItem("token");
+            return !!localStorage.getItem('token')
         },
     },
     created() {
-        this.fetchRandomVols();
+        this.fetchRandomVols()
     },
     methods: {
         async fetchRandomVols() {
-            this.loading = true;
-            this.error = null;
+            this.loading = true
+            this.error = null
 
             try {
-                const response = await axios.get("/api/vols-home");
-                this.vols = response.data;
+                const response = await axios.get('/api/vols-home')
+                this.vols = response.data
             } catch (e) {
-                this.error = "Impossible de charger les vols.";
+                this.error = this.t('home.error')
             } finally {
-                this.loading = false;
+                this.loading = false
             }
         },
         formatDate(value) {
             if (!value) {
-                return "";
+                return ''
             }
-            return new Date(value).toLocaleString();
+            return new Date(value).toLocaleString()
         },
     },
-};
+}
 </script>

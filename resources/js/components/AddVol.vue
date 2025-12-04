@@ -1,35 +1,35 @@
 <template>
-    <div class="modal-mask">
+    <div class="modal-mask" :dir="direction" :lang="lang">
         <div class="modal-dialog">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h1 class="h4 mb-0">{{ isEdit ? 'Modifier un vol' : 'Ajouter un vol' }}</h1>
-                        <RouterLink class="btn-close" to="/vols" aria-label="Fermer"></RouterLink>
+                        <h1 class="h4 mb-0">{{ isEdit ? t('addVol.headingEdit') : t('addVol.headingCreate') }}</h1>
+                        <RouterLink class="btn-close" to="/vols" :aria-label="t('listVols.fermer')"></RouterLink>
                     </div>
 
-                    <div v-if="success" class="alert alert-success">Vol enregistré avec succès.</div>
+                    <div v-if="success" class="alert alert-success">{{ t('addVol.success') }}</div>
                     <div v-if="error" class="alert alert-danger">{{ error }}</div>
 
                     <form @submit.prevent="submit">
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label class="form-label" for="vol-id">Code du vol</label>
+                                <label class="form-label" for="vol-id">{{ t('addVol.labels.code') }}</label>
                                 <input id="vol-id" v-model="form.id" type="text" class="form-control" :disabled="isEdit" required />
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label" for="vol-origine">Origine</label>
+                                <label class="form-label" for="vol-origine">{{ t('addVol.labels.origin') }}</label>
                                 <input id="vol-origine" v-model="form.origine" type="text" class="form-control" required />
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label" for="vol-destination">Destination</label>
+                                <label class="form-label" for="vol-destination">{{ t('addVol.labels.destination') }}</label>
                                 <input id="vol-destination" v-model="form.destination" type="text" class="form-control" required />
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label" for="vol-depart">Date de départ</label>
+                                <label class="form-label" for="vol-depart">{{ t('addVol.labels.depart') }}</label>
                                 <input
                                     id="vol-depart"
                                     v-model="form.date_depart"
@@ -39,7 +39,7 @@
                                 />
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label" for="vol-arrivee">Date d'arrivée</label>
+                                <label class="form-label" for="vol-arrivee">{{ t('addVol.labels.arrivee') }}</label>
                                 <input
                                     id="vol-arrivee"
                                     v-model="form.date_arrive"
@@ -52,7 +52,7 @@
 
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label class="form-label" for="vol-prix">Prix ($)</label>
+                                <label class="form-label" for="vol-prix">{{ t('addVol.labels.price') }}</label>
                                 <input
                                     id="vol-prix"
                                     v-model.number="form.prix"
@@ -64,16 +64,16 @@
                                 />
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label" for="vol-avion">Avion</label>
+                                <label class="form-label" for="vol-avion">{{ t('addVol.labels.plane') }}</label>
                                 <select id="vol-avion" v-model="form.avion_id" class="form-select" required>
-                                    <option value="" disabled>Choisir un avion…</option>
+                                    <option value="" disabled>{{ t('addVol.selectPlaceholder') }}</option>
                                     <option v-for="avion in avions" :key="avion.id" :value="avion.id">
                                         {{ avion.modele }} ({{ avion.capacite }} pl.)
                                     </option>
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Photo (glisser-déposer)</label>
+                                <label class="form-label">{{ t('addVol.labels.photo') }}</label>
                                 <div
                                     class="dropzone"
                                     :class="{ over: dragOver }"
@@ -84,21 +84,21 @@
                                 >
                                     <input ref="fileInput" type="file" accept="image/*" class="d-none" @change="onFileSelect" />
                                     <div v-if="previewUrl">
-                                        <img :src="previewUrl" alt="Prévisualisation" class="img-fluid rounded mb-1" />
-                                        <div class="text-muted small">{{ fileName || 'Image existante' }}</div>
+                                        <img :src="previewUrl" :alt="t('addVol.labels.photo')" class="img-fluid rounded mb-1" />
+                                        <div class="text-muted small">{{ fileName || t('addVol.existingImage') }}</div>
                                     </div>
-                                    <div v-else class="text-muted small">Glissez une image ici ou cliquez pour choisir.</div>
+                                    <div v-else class="text-muted small">{{ t('addVol.dropText') }}</div>
                                 </div>
-                                <small class="text-muted">PNG/JPG, 4 Mo max.</small>
+                                <small class="text-muted">{{ t('addVol.dropInfo') }}</small>
                             </div>
                         </div>
 
                         <div class="d-flex align-items-center gap-2">
                             <button type="submit" class="btn btn-success" :disabled="loading">
                                 <span v-if="loading" class="spinner-border spinner-border-sm me-2" />
-                                Enregistrer le vol
+                                {{ t('addVol.submit') }}
                             </button>
-                            <RouterLink class="btn btn-outline-secondary" to="/vols">Annuler</RouterLink>
+                            <RouterLink class="btn btn-outline-secondary" to="/vols">{{ t('addVol.cancel') }}</RouterLink>
                         </div>
                     </form>
                 </div>
@@ -110,10 +110,15 @@
 <script>
 import axios from 'axios'
 import { RouterLink } from 'vue-router'
+import { useI18n } from '../i18n'
 
 export default {
     name: 'AddVol',
     components: { RouterLink },
+    setup() {
+        const { t, lang, direction } = useI18n()
+        return { t, lang, direction }
+    },
     data() {
         return {
             avions: [],
@@ -145,7 +150,6 @@ export default {
         if (this.isEdit) {
             this.fetchVol()
         }
-        // Assure que le focus clavier reste possible même si un overlay précédent est resté affiché
         document.body.classList.remove('modal-open-block')
     },
     methods: {
@@ -161,7 +165,7 @@ export default {
                 const response = await axios.get('/api/avions')
                 this.avions = response.data
             } catch {
-                this.error = 'Impossible de charger la liste des avions. Vérifiez que vous êtes connecté.'
+                this.error = this.t('addVol.loadAvionsError')
             }
         },
         async fetchVol() {
@@ -182,7 +186,7 @@ export default {
                     this.fileName = data.photo?.split('/').pop() || 'image'
                 }
             } catch (e) {
-                this.error = 'Impossible de charger le vol.'
+                this.error = this.t('addVol.loadError')
             }
         },
         onDrop(e) {
@@ -246,13 +250,13 @@ export default {
                 }
             } catch (e) {
                 if (e.response && e.response.status === 401) {
-                    this.error = 'Accès refusé. Veuillez vous connecter.'
+                    this.error = this.t('addVol.accessDenied')
                 } else if (e.response && e.response.data && e.response.data.errors) {
                     const errors = e.response.data.errors
                     const firstKey = Object.keys(errors)[0]
                     this.error = errors[firstKey][0]
                 } else {
-                    this.error = "Impossible d'enregistrer le vol."
+                    this.error = this.t('addVol.error')
                 }
             } finally {
                 this.loading = false

@@ -1,37 +1,37 @@
 <template>
-    <div class="modal-mask">
+    <div class="modal-mask" :dir="direction" :lang="lang">
         <div class="modal-dialog">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h1 class="h4 mb-0">Connexion</h1>
-                        <RouterLink class="btn-close" to="/" aria-label="Fermer"></RouterLink>
+                        <h1 class="h4 mb-0">{{ t('login.title') }}</h1>
+                        <RouterLink class="btn-close" to="/" :aria-label="t('login.close')"></RouterLink>
                     </div>
 
                     <div v-if="error" class="alert alert-danger">{{ error }}</div>
 
                     <form @submit.prevent="submit">
                         <div class="mb-3">
-                            <label class="form-label" for="login-email">Courriel</label>
+                            <label class="form-label" for="login-email">{{ t('login.email') }}</label>
                             <input id="login-email" v-model="email" type="email" class="form-control" required />
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label" for="login-password">Mot de passe</label>
+                            <label class="form-label" for="login-password">{{ t('login.password') }}</label>
                             <input id="login-password" v-model="password" type="password" class="form-control" required />
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">reCAPTCHA</label>
+                            <label class="form-label">{{ t('login.captcha') }}</label>
                             <div ref="recaptchaContainer" class="recaptcha-box"></div>
                         </div>
 
                         <div class="d-flex align-items-center gap-2">
                             <button type="submit" class="btn btn-primary" :disabled="loading">
                                 <span v-if="loading" class="spinner-border spinner-border-sm me-2" />
-                                Se connecter
+                                {{ t('login.submit') }}
                             </button>
-                            <RouterLink class="btn btn-link" to="/register">Créer un compte</RouterLink>
+                            <RouterLink class="btn btn-link" to="/register">{{ t('login.registerCta') }}</RouterLink>
                         </div>
                     </form>
                 </div>
@@ -43,10 +43,15 @@
 <script>
 import axios from 'axios'
 import { RouterLink } from 'vue-router'
+import { useI18n } from '../i18n'
 
 export default {
     name: 'Login',
     components: { RouterLink },
+    setup() {
+        const { t, lang, direction } = useI18n()
+        return { t, lang, direction }
+    },
     data() {
         return {
             email: '',
@@ -71,7 +76,7 @@ export default {
         waitAndRenderCaptcha() {
             const siteKey = window.RECAPTCHA_SITE_KEY || ''
             if (!siteKey) {
-                this.error = 'reCAPTCHA non configuré.'
+                this.error = this.t('login.captchaNotConfigured')
                 return
             }
 
@@ -87,7 +92,7 @@ export default {
                         },
                         'error-callback': () => {
                             this.recaptchaToken = ''
-                            this.error = 'Captcha invalide.'
+                            this.error = this.t('login.captchaInvalid')
                         },
                         'expired-callback': () => {
                             this.recaptchaToken = ''
@@ -104,7 +109,7 @@ export default {
         },
         async submit() {
             if (!this.recaptchaToken) {
-                this.error = 'Merci de valider le captcha.'
+                this.error = this.t('login.captchaMissing')
                 return
             }
 
@@ -134,7 +139,7 @@ export default {
                     const firstKey = Object.keys(errors)[0]
                     this.error = errors[firstKey][0]
                 } else {
-                    this.error = 'Une erreur est survenue. Veuillez réessayer.'
+                    this.error = this.t('login.error')
                 }
                 this.resetCaptcha()
             } finally {

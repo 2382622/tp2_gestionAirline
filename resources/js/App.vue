@@ -1,8 +1,8 @@
 <template>
-    <div class="app-shell">
+    <div class="app-shell" :dir="direction" :lang="lang">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm mb-4">
             <div class="container">
-                <RouterLink class="navbar-brand" to="/">Gestion Airline</RouterLink>
+                <RouterLink class="navbar-brand" to="/">{{ t('nav.brand') }}</RouterLink>
 
                 <button
                     class="navbar-toggler"
@@ -19,23 +19,47 @@
                 <div class="collapse navbar-collapse" id="spaNavbar">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <RouterLink class="nav-link" to="/">Accueil</RouterLink>
+                            <RouterLink class="nav-link" to="/">{{ t('nav.home') }}</RouterLink>
                         </li>
                         <li class="nav-item">
-                            <RouterLink class="nav-link" to="/vols">Vols</RouterLink>
+                            <RouterLink class="nav-link" to="/vols">{{ t('nav.flights') }}</RouterLink>
                         </li>
                         <li class="nav-item">
-                            <RouterLink class="nav-link" to="/tickets">Mes billets</RouterLink>
+                            <RouterLink class="nav-link" to="/tickets">{{ t('nav.tickets') }}</RouterLink>
                         </li>
                         <li class="nav-item">
-                            <RouterLink class="nav-link" to="/recherche">Recherche</RouterLink>
+                            <RouterLink class="nav-link" to="/recherche">{{ t('nav.search') }}</RouterLink>
                         </li>
                         <li class="nav-item" v-if="isAdmin">
-                            <RouterLink class="nav-link" :to="{ name: 'avions.index' }">Liste Avions</RouterLink>
+                            <RouterLink class="nav-link" :to="{ name: 'avions.index' }">{{ t('nav.listPlanes') }}</RouterLink>
                         </li>
                     </ul>
 
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto align-items-md-center gap-2">
+                        <li class="nav-item dropdown">
+                            <button
+                                class="btn btn-outline-secondary btn-sm dropdown-toggle d-flex align-items-center gap-2"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                <span>{{ currentLanguage.flag }}</span>
+                                <span>{{ currentLanguage.label }}</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li v-for="option in languages" :key="option.code">
+                                    <button
+                                        class="dropdown-item d-flex align-items-center gap-2"
+                                        type="button"
+                                        @click="changeLang(option.code)"
+                                    >
+                                        <span>{{ option.flag }}</span>
+                                        <span>{{ option.label }}</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
+
                         <template v-if="isAuthenticated">
                             <li class="nav-item">
                                 <RouterLink class="nav-link" to="/dashboard">
@@ -43,17 +67,17 @@
                                 </RouterLink>
                             </li>
                             <li class="nav-item">
-                                <button class="btn btn-outline-danger btn-sm ms-2" @click="logout">
-                                    Déconnexion
+                                <button class="btn btn-outline-danger btn-sm ms-md-2" @click="logout">
+                                    {{ t('nav.logout') }}
                                 </button>
                             </li>
                         </template>
                         <template v-else>
                             <li class="nav-item">
-                                <RouterLink class="nav-link" to="/login">Connexion</RouterLink>
+                                <RouterLink class="nav-link" to="/login">{{ t('nav.login') }}</RouterLink>
                             </li>
                             <li class="nav-item">
-                                <RouterLink class="nav-link" to="/register">Inscription</RouterLink>
+                                <RouterLink class="nav-link" to="/register">{{ t('nav.register') }}</RouterLink>
                             </li>
                         </template>
                     </ul>
@@ -68,7 +92,7 @@
         <footer class="app-footer">
             <div class="container text-center">
                 <RouterLink class="app-footer-link" to="/about">
-                    À propos
+                    {{ t('nav.about') }}
                 </RouterLink>
             </div>
         </footer>
@@ -78,12 +102,17 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import axios from 'axios'
+import { useI18n } from './i18n'
 
 export default {
     name: 'App',
     components: {
         RouterLink,
         RouterView,
+    },
+    setup() {
+        const { t, lang, direction, languages, setLang } = useI18n()
+        return { t, lang, direction, languages, setLang }
     },
     data() {
         return {
@@ -105,6 +134,9 @@ export default {
                 ? `${this.user.prenom} ${this.user.name}`
                 : this.user.name
         },
+        currentLanguage() {
+            return this.languages.find((l) => l.code === this.lang) || this.languages[0]
+        },
     },
     created() {
         const storedUser = localStorage.getItem('user')
@@ -120,7 +152,7 @@ export default {
                 try {
                     await axios.post('/api/logout')
                 } catch (e) {
-                    // ignore erreurs de déconnexion
+                    // ignore logout errors
                 }
             }
             localStorage.removeItem('token')
@@ -128,6 +160,9 @@ export default {
             delete axios.defaults.headers.common.Authorization
             this.user = null
             this.$router.push({ name: 'home' })
+        },
+        changeLang(code) {
+            this.setLang(code)
         },
     },
     watch: {
@@ -165,4 +200,3 @@ export default {
     text-decoration: underline;
 }
 </style>
-
