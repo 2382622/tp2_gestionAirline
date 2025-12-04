@@ -45,7 +45,8 @@ class VolSeeder extends Seeder
                     'prix'        => 350 + ($index * 10),
                     'efface'      => 0,
                     'avion_id'    => $avion->id,
-                    'photo'       => null,
+                    // Valeur par dÃ©faut non nulle pour respecter la contrainte NOT NULL
+                    'photo'       => 'default_vol.jpg',
                 ]);
 
                 $index++;
