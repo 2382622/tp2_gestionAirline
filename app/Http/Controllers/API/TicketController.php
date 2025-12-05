@@ -33,13 +33,28 @@ class TicketController extends Controller
 
         $data = $request->validate($rules);
 
-        $ticket = Ticket::create([
-            'vol_id' => $data['vol_id'],
-            'quantite' => $data['quantite'],
-            'user_id' => $user->role === 'admin' ? $data['user_id'] : $user->id,
-        ]);
+        $userId = $user->role === 'admin' ? $data['user_id'] : $user->id;
 
-        return response()->json($ticket, 201);
+        // Si un ticket existe déjà pour ce vol et cet utilisateur,
+        // on incrémente simplement la quantité.
+        $ticket = Ticket::where('user_id', $userId)
+            ->where('vol_id', $data['vol_id'])
+            ->first();
+
+        if ($ticket) {
+            $ticket->quantite += $data['quantite'];
+            $ticket->save();
+            $status = 200;
+        } else {
+            $ticket = Ticket::create([
+                'vol_id' => $data['vol_id'],
+                'quantite' => $data['quantite'],
+                'user_id' => $userId,
+            ]);
+            $status = 201;
+        }
+
+        return response()->json($ticket, $status);
     }
 
     // GET /api/tickets/{id}

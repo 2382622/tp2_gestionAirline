@@ -59,6 +59,9 @@
                                     <button class="btn btn-sm btn-outline-secondary me-2" @click="openDetails(vol)">
                                         {{ t('listVols.details') }}
                                     </button>
+                                    <button class="btn btn-sm btn-primary me-2" @click="buyTicket(vol)">
+                                        Acheter
+                                    </button>
                                     <div v-if="isAdmin" class="d-inline-flex gap-2">
                                         <RouterLink class="btn btn-sm btn-outline-warning" :to="`/vols/${vol.id}/edit`">
                                             {{ t('listVols.modifier') }}
@@ -154,6 +157,29 @@ export default {
                 this.error = this.t('listVols.loadError')
             } finally {
                 this.loading = false
+            }
+        },
+        async buyTicket(vol) {
+            const token = localStorage.getItem('token')
+            if (!token) {
+                this.$router.push({ name: 'login' })
+                return
+            }
+
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+            try {
+                await axios.post('/api/tickets', {
+                    vol_id: vol.id,
+                    quantite: 1,
+                })
+                this.$router.push({ name: 'tickets.index' })
+            } catch (e) {
+                if (e.response && e.response.status === 401) {
+                    this.$router.push({ name: 'login' })
+                } else {
+                    alert(this.t('tickets.errors.load'))
+                }
             }
         },
         formatDate(value) {

@@ -24,7 +24,7 @@
                                 <th>{{ t('tickets.columns.flight') }}</th>
                                 <th>{{ t('tickets.columns.user') }}</th>
                                 <th>{{ t('tickets.columns.quantity') }}</th>
-                                <th v-if="isAdmin" class="text-end">{{ t('tickets.columns.actions') }}</th>
+                                <th class="text-end">{{ t('tickets.columns.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,11 +33,22 @@
                                 <td>{{ ticket.vol_id }}</td>
                                 <td>{{ ticket.user_id }}</td>
                                 <td>{{ ticket.quantite }}</td>
-                                <td v-if="isAdmin" class="text-end">
-                                    <button class="btn btn-sm btn-outline-warning me-1" @click="editTicket(ticket)">
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-outline-secondary me-1" @click="removeOne(ticket)">
+                                        Supprimer 1
+                                    </button>
+                                    <button
+                                        v-if="isAdmin"
+                                        class="btn btn-sm btn-outline-warning me-1"
+                                        @click="editTicket(ticket)"
+                                    >
                                         {{ t('listVols.modifier') }}
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger" @click="deleteTicket(ticket)">
+                                    <button
+                                        v-if="isAdmin"
+                                        class="btn btn-sm btn-outline-danger"
+                                        @click="deleteTicket(ticket)"
+                                    >
                                         {{ t('listVols.supprimer') }}
                                     </button>
                                 </td>
@@ -125,6 +136,25 @@ export default {
             try {
                 await axios.delete(`/api/tickets/${ticket.id}`)
                 this.tickets = this.tickets.filter((t) => t.id !== ticket.id)
+            } catch (e) {
+                alert(this.t('tickets.deleteError'))
+            }
+        },
+        async removeOne(ticket) {
+            const token = localStorage.getItem('token')
+            if (token) {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+            }
+
+            try {
+                if (ticket.quantite > 1) {
+                    const nouvelleQuantite = ticket.quantite - 1
+                    await axios.put(`/api/tickets/${ticket.id}`, { quantite: nouvelleQuantite })
+                    ticket.quantite = nouvelleQuantite
+                } else {
+                    await axios.delete(`/api/tickets/${ticket.id}`)
+                    this.tickets = this.tickets.filter((t) => t.id !== ticket.id)
+                }
             } catch (e) {
                 alert(this.t('tickets.deleteError'))
             }
